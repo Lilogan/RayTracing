@@ -9,12 +9,12 @@ typedef struct point_ {
 } point;
 
 typedef struct cartesianPlan_{
-  //ax+by+cs+d=0
+  // ax + by + cz + d = 0
   float a;
   float b;
   float c;
   float d;
-}cartesianPlan;
+} cartesianPlane;
 
 typedef struct parametricPlan_{
   vecteur dir1;
@@ -23,16 +23,16 @@ typedef struct parametricPlan_{
 } parametricPlan;
 
 typedef struct vector_ {
-  //A= (x,y,z)
+  // A (x,y,z)
   float x;
   float y;
   float z;
-}vector;
+} vector;
 
 typedef struct line_{
 	vecteur dir;
   point point;
-}line;
+} line;
 
 typedef struct halfLine_{
   // min = true => define a minimum
@@ -41,12 +41,14 @@ typedef struct halfLine_{
   point point;
   bool min;
   float param;
-}halfLine;
+} halfLine;
 
 typedef struct polygon_{
   int pointNbre;
   point* vertex;
-}polygon;
+} polygon;
+
+vector setVector(point a, point b);
 
 vector qTimeVector(int k, vector u);//done
 
