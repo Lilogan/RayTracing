@@ -8,19 +8,19 @@ typedef struct point_ {
   float z;
 } point;
 
-typedef struct cartesianPlane_{
+typedef struct cartesianplan_{
   //ax+by+cs+d=0
   float a;
   float b;
   float c;
   float d;
-}cartesianPlane;
+}cartesianplan;
 
-typedef struct parametricPlane_{
+typedef struct parametricplan_{
   vecteur dir1;
   vecteur dir2;
   point point;
-} parametricPlane;
+} parametricplan;
 
 typedef struct vector_ {
   //A= (x,y,z)
@@ -60,12 +60,12 @@ float normVector(vector u);//done
 
 vector productVector(vector u, vector v);//done
 
-point intersect(cartesianPlane p, halfLine d);
+point intersect(cartesianplan p, halfLine d);
 
-vector reflect(line i, cartesianPlane p);
+vector reflect(line i, cartesianplan p);
 
-vector refracte(vector i, cartesianPlane p);
+vector refracte(vector i, cartesianplan p);
 
-cartesianPlane firstPlaneIntersect(line line);
+cartesianplan firstplanIntersect(line line);
 
-vector normal(cartesianPlane p);
+vector normal(cartesianplan p);
