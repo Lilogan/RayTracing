@@ -7,61 +7,61 @@ typedef struct point_ {
   float z;
 } point;
 
-typedef struct planCartesien_ {
+typedef struct cartesianPlane_{
   //ax+by+cs+d=0
   float a;
   float b;
   float c;
   float d;
-} planCartesien;
+}cartesianPlane;
 
-typedef struct planParametrique_{
+typedef struct parametricPlane_{
   vecteur dir1;
   vecteur dir2;
   point point;
-} planParametrique;
+} parametricPlane;
 
-typedef struct vecteur_ {
+typedef struct vector_ {
   //A= (x,y,z)
   float x;
   float y;
   float z;
-} vecteur;
+}vector;
 
-typedef struct droite_{
+typedef struct line_{
 	vecteur dir;
   point point;
-}droite;
+}line;
 
-typedef struct demiDroite_{
+typedef struct halfLine_{
 	vecteur dir;
   point point;
   float paramMin;
-}demiDroite;
+}halfLine;
 
-typedef struct polygone_{
-  int nbrePoint;
-  point* sommets;
-}
+typedef struct polygon_{
+  int pointNbre;
+  point* vertex;
+}polygon;
 
-vecteur qFoisVecteur(int k, vecteur u);
+vector qTimeVector(int k, vector u);
 
-vecteur additionVecteurs(vecteur u, vecteur v);
+vector addVectors(vector u, vector v);
 
-vecteur soustractionVecteurs(vecteur u, vecteur v);
+vector substractVectors(vector u, vector v);
 
-vecteur scalaireVecteurs(vecteur u, vecteur v);
+vector scalarVectors(vector u, vector v);
 
-float normeVecteur(vecteur u);
+float normVector(vector u);
 
-vecteur produitVectoriel(vecteur u, vecteur v);
+vector produitVector(vector u, vector v);
 
-point intersection(planCartesien p, droite d);
+point intersect(cartesianPlane p, line d);
 
-vecteur reflechi(vecteur i, planCartesien p);
+vector reflect(vector i, cartesianPlane p);
 
-vecteur refracte(vecteur i, planCartesien p);
+vector refracte(vector i, cartesianPlane p);
 
-planCartesien premierEltRencontre(point obs, vecteur ray);
+cartesianPlane firstPlaneIntersect(line line);
 
-vecteur normale(planCartesien p);
+vector normal(cartesianPlane p);
