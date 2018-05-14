@@ -1,5 +1,13 @@
 #include <math.h>
 
+vector setVector(point a, point b){
+  vector u;
+  u.x = b.x - a.x;
+  u.y = b.y - a.y;
+  u.z = b.z - a.z;
+  return u;
+}
+
 vector qTimeVector(int k, vector u){
   u.x = k * u.x;
   u.y = k * u.y;
@@ -28,7 +36,7 @@ float normVector(vector u){
 }
 
 vector scalarVectors(vector u, vector v){
-  return 1 / 2 * (normevector(u) + normevector(v) - normevector(soustractionvector(v, u)));
+  return 1 / 2 * (normVector(u) + normVector(v) - normVector(soustractionvector(v, u)));
 }
 
 vector productVector(vector u, vector v){
@@ -45,12 +53,11 @@ point intersect(cartesianPlan p, halfLine d){
   calculatedParam = -(p.a*d.point.x + p.b*d.point.y + p.c*d.point.x +p.d)
   calculatedParam = calculatedParam/(p.a*d.dir.x + p.b*d.dir.y + p.c*d.dir.z)
 
-  if(halfLine.min == true && halfLine.param <= calculatedParam){
+  if(d.min == true && d.param <= calculatedParam){
     returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
     returnedPoint.y = d.point.y + d.dir.y*calculatedParam;
     returnedPoint.z = d.point.z + d.dir.z*calculatedParam;
-  }
-  else if(halfLine.min == false && halfLine.param >= calculatedParam){
+  } else if(d.min == false && d.param >= calculatedParam){
     returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
     returnedPoint.y = d.point.y + d.dir.y*calculatedParam;
     returnedPoint.z = d.point.z + d.dir.z*calculatedParam;
