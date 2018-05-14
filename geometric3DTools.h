@@ -1,37 +1,48 @@
 #include <math.h>
 
-typedef struct droite_{
-	float t;
-	int x;
-	int y;
-	int z;
-}droite;//à vérifier
-
-typedef struct fonction_ {
-  int a;
-  int b;
-  int c;
-  int d;
-} fonction;
-
 typedef struct point_ {
-  int x;
-  int y;
-  int z;
+  //A = (x,y,z)
+  float x;
+  float y;
+  float z;
 } point;
 
-typedef struct plan_ {
-  int a;
-  int b;
-  int c;
-  int d;
-} plan;
+typedef struct planCartesien_ {
+  //ax+by+cs+d=0
+  float a;
+  float b;
+  float c;
+  float d;
+} planCartesien;
+
+typedef struct planParametrique_{
+  vecteur dir1;
+  vecteur dir2;
+  point point;
+} planParametrique;
 
 typedef struct vecteur_ {
-  int x;
-  int y;
-  int z;
+  //A= (x,y,z)
+  float x;
+  float y;
+  float z;
 } vecteur;
+
+typedef struct droite_{
+	vecteur dir;
+  point point;
+}droite;
+
+typedef struct demiDroite_{
+	vecteur dir;
+  point point;
+  float paramMin;
+}demiDroite;
+
+typedef struct polygone_{
+  int nbrePoint;
+  point* sommets;
+}
 
 vecteur qFoisVecteur(int k, vecteur u);
 
@@ -45,12 +56,12 @@ float normeVecteur(vecteur u);
 
 vecteur produitVectoriel(vecteur u, vecteur v);
 
-point intersection(plan p, droite d);
+point intersection(planCartesien p, droite d);
 
-vecteur reflechi(vecteur i, plan p);
+vecteur reflechi(vecteur i, planCartesien p);
 
-vecteur refracte(vecteur i, plan p);
+vecteur refracte(vecteur i, planCartesien p);
 
-plan premierEltRencontre(point obs, vecteur ray);
+planCartesien premierEltRencontre(point obs, vecteur ray);
 
-vecteur normale(plan p);
+vecteur normale(planCartesien p);
