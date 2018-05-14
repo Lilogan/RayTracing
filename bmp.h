@@ -1,38 +1,39 @@
-typedef struct Pixel_{
+typedef struct pixel_{
 	unsigned char red;
   unsigned char green;
   unsigned char blue;
-}Pixel;
+}pixel;
 
-typedef struct Image_{
+typedef struct image_{
 	int width;
   int height;
-	Pixel* dat;
-}Image;
+	pixel* data;
+}image;
 
-typedef struct ImgHeadBmp_{
-  int sizeImgHead;
+typedef struct imgHeadBmp_{
+  int size;
   int width;
   int height;
   short nbPlan;
   short bpp;
-  int compression;
+  int compress;
   int sizeImg;
   int hRes;
   int vRes;
   int colPalette;
   int imColPalette;
-}ImgHeadBmp;
+}imgHeadBmp;
 
-typedef struct HeadBmp_{
-  short sign;
-  int taille;
+typedef struct headBmp_{
+  char sign[2];
+  int size;
   int rsv;
   int offset;
-  ImgHeadBmp imgHead;
-}HeadBmp;
+  imgHeadBmp imgHead;
+}headBmp;
 
-Image* NouvelleImage(int w,int h);
-void SetPixel(Image*,int i,int j,Pixel p);
-Pixel GetPixel(Image*,int i,int j);
-int Sauver(Image*,const char* fichier);
+image* newImage(int width,int height);
+void setPixel(image*,int i,int j,pixel p);
+pixel getPixel(image*,int i,int j);
+int save(image*,const char* file);
+void delImage(image*);
