@@ -39,7 +39,7 @@ vector productVector(vector u, vector v){
   return w;
 }
 
-point intersect(cartesianplan p, halfLine d){
+point intersect(cartesianPlan p, halfLine d){
   float calculatedParam;
   point returnedPoint = NULL;
   calculatedParam = -(p.a*d.point.x + p.b*d.point.y + p.c*d.point.x +p.d)
