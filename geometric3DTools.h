@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdbool.h>
 
 typedef struct point_ {
   //A = (x,y,z)
@@ -34,9 +35,12 @@ typedef struct line_{
 }line;
 
 typedef struct halfLine_{
+  // min = true => define a minimum
+  // min = false => define a maximum
 	vecteur dir;
   point point;
-  float paramMin;
+  bool min;
+  float param;
 }halfLine;
 
 typedef struct polygon_{
@@ -44,21 +48,21 @@ typedef struct polygon_{
   point* vertex;
 }polygon;
 
-vector qTimeVector(int k, vector u);
+vector qTimeVector(int k, vector u);//done
 
-vector addVectors(vector u, vector v);
+vector addVectors(vector u, vector v);//done
 
-vector substractVectors(vector u, vector v);
+vector substractVectors(vector u, vector v);//done
 
-vector scalarVectors(vector u, vector v);
+vector scalarVectors(vector u, vector v);//done
 
-float normVector(vector u);
+float normVector(vector u);//done
 
-vector productVector(vector u, vector v);
+vector productVector(vector u, vector v);//done
 
-point intersect(cartesianPlane p, line d);
+point intersect(cartesianPlane p, halfLine d);
 
-vector reflect(vector i, cartesianPlane p);
+vector reflect(line i, cartesianPlane p);
 
 vector refracte(vector i, cartesianPlane p);
 
