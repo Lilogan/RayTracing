@@ -54,7 +54,7 @@ vector scalarVectors(vector u, vector v);
 
 float normVector(vector u);
 
-vector produitVector(vector u, vector v);
+vector productVector(vector u, vector v);
 
 point intersect(cartesianPlane p, line d);
 
