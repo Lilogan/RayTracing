@@ -37,6 +37,9 @@ float normVector(vector u){
 }
 
 float scalarVectors(vector u, vector v){
+  vector w;
+  w = u.x*v.x + u.y+v.y + u.z*v.z;
+  return w;
 }
 
 vector productVector(vector u, vector v){

@@ -122,7 +122,7 @@ typedef struct polygon_{
   point* vertex;
 } polygon;
 
-vector setVector(point a, point b);
+vector setVector(point a, point b); //done
 
 vector qTimeVector(int k, vector u);//done
 
@@ -136,13 +136,12 @@ float normVector(vector u);//done
 
 vector productVector(vector u, vector v);//done
 
-point intersect(cartesianPlan p, halfLine d);
+point intersect(cartesianPlan p, halfLine d);//done
 
-vector reflect(line i, cartesianPlan p);
+vector reflect(line i, cartesianPlan p);//done
 
 vector refracte(vector i, cartesianPlan p);
 
 cartesianPlan firstPlanIntersect(line line);
 
-vector normal(cartesianPlan p);
->>>>>>> c
+vector normal(cartesianPlan p); //done
