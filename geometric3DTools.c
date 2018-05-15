@@ -27,6 +27,18 @@ polygon setPolygon(int pointNbr, point* vertex){
   return poly;
 }
 
+polygon setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ){
+  ovoide s;
+  s.a = a;
+  s.b = b;
+  s.c = c;
+  s.d = d;
+  s.degX = degX;
+  s.degY = degY;
+  s.degZ = degZ;
+  return s;
+}
+
 vector qTimeVector(int k, vector u){
   u.x = k * u.x;
   u.y = k * u.y;

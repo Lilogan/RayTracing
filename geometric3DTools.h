@@ -48,22 +48,24 @@ typedef struct polygon_{
   point* vertex;
 } polygon;
 
-typedef struct surface_{
+typedef struct ovoide_{
   // ax + by + cz + d = 0 avec degrés
   float a;
   float b;
   float c;
   float d;
-  int degX;
-  int degY;
   int degZ;
-} surface;
+  int degY;
+  int degX;
+} ovoide;
 
 point setPoint(int x, int y, int z); //done
 
 vector setVector(point a, point b); //done
 
 polygon setPolygon(int pointNbr, point* vertex); //done
+
+polygon setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ); //done
 
 vector qTimeVector(int k, vector u);//done
 
