@@ -9,19 +9,19 @@ typedef struct point_ {
 } point;
 
 typedef struct cartesianPlan_{
-  //ax+by+cs+d=0
+  //ax+by+cz+d=0
   float a;
   float b;
   float c;
   float d;
-}cartesianPlan;
+} cartesianPlan;
 
 typedef struct vector_ {
   //A= (x,y,z)
   float x;
   float y;
   float z;
-}vector;
+} vector;
 
 typedef struct parametricPlan_{
   vector dir1;
@@ -33,7 +33,7 @@ typedef struct parametricPlan_{
 typedef struct line_{
 	vector dir;
   point point;
-}line;
+} line;
 
 typedef struct halfLine_{
   // min = true => define a minimum
@@ -42,12 +42,40 @@ typedef struct halfLine_{
   point point;
   bool min;
   float param;
-}halfLine;
+} halfLine;
+
+typedef struct color_{
+  int r;
+  int g;
+  int b;
+} color;
 
 typedef struct polygon_{
-  int pointNbre;
+  int pointNbr;
   point* vertex;
-}polygon;
+  color color;
+} polygon;
+
+typedef struct ovoide_{
+  // ax + by + cz + d = 0 avec degrés
+  float a;
+  float b;
+  float c;
+  float d;
+  int degX
+  int degY
+  int degZ
+} ovoide;
+
+point setPoint(int x, int y, int z); //done
+
+vector setVector(point a, point b); //done
+
+polygon setPolygon(int pointNbr, point* vertex); //done
+
+ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ); //done
+
+halfLine setHalfLine(point origin, point randPoint); //done
 
 vector qTimeVector(int k, vector u);//done
 
@@ -55,18 +83,30 @@ vector addVectors(vector u, vector v);//done
 
 vector substractVectors(vector u, vector v);//done
 
-float scalarVectors(vector u, vector v);//done
-
 float normVector(vector u);//done
+
+float scalarVectors(vector u, vector v);//done
 
 vector productVector(vector u, vector v);//done
 
-point intersect(cartesianPlan p, halfLine d); // done
+float calculParam(cartesianPlan p, halfLine d); //done
+
+point intersectPlanHalfLine(cartesianPlan p, halfLine d); // done
+
+vector normal(cartesianPlan p);//done
+
+// vector refracte(halfLine i, cartesianPlan p);
+
+// cartesianPlan firstPlanIntersect(line line);
 
 vector reflect(halfLine i, cartesianPlan p); //done
 
-vector refracte(halfLine i, cartesianPlan p);
+cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 
-cartesianPlan firstPlanIntersect(line line);
+cartesianPlan planOfPolygon(polygon inputPolygon); //done
 
-vector normal(cartesianPlan p);//done
+bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
+
+float distancePoints(point a, point b); //done
+
+point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera); //done
