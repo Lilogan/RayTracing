@@ -66,7 +66,7 @@ float calculParam(cartesianPlan p, halfLine d){
   return calculatedParam;
 }
 
-point intersect(cartesianPlan p, halfLine d){
+point intersectPlanHalfLine(cartesianPlan p, halfLine d){
   float calculatedParam = calculParam(p, d);
   point returnedPoint;
 
@@ -147,7 +147,7 @@ cartesianPlan planOfPolygon(polygon inputPolygon){
   return polygonPlan;
 }
 
-bool inRayInpolygon(polygon inputPolygon, halfLine ray){
+bool isRayInpolygon(polygon inputPolygon, halfLine ray){
   cartesianPlan polygonPlan;
   cartesianPlan normalPlan;
   int vertexNbr;
@@ -164,7 +164,7 @@ bool inRayInpolygon(polygon inputPolygon, halfLine ray){
     return false;
   }
 
-  intersection = intersect(polygonPlan, ray);
+  intersection = intersectPlanHalfLine(polygonPlan, ray);
   normalVector.x = polygonPlan.a;
   normalVector.y = polygonPlan.b;
   normalVector.z = polygonPlan.c;

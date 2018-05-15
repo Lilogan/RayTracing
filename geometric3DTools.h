@@ -60,6 +60,8 @@ typedef struct surface_{
   int degZ
 } surface;
 
+vector setVector(point a, point b); //done
+
 vector qTimeVector(int k, vector u);//done
 
 vector addVectors(vector u, vector v);//done
@@ -72,14 +74,20 @@ float normVector(vector u);//done
 
 vector productVector(vector u, vector v);//done
 
-point intersect(cartesianPlan p, halfLine d); // done
+point intersectPlanHalfLine(cartesianPlan p, halfLine d); // done
 
 vector reflect(halfLine i, cartesianPlan p); //done
 
 vector refracte(halfLine i, cartesianPlan p);
 
+float calculParam(cartesianPlan p, halfLine d); //done
+
 cartesianPlan firstPlanIntersect(line line);
 
 vector normal(cartesianPlan p);//done
 
-bool inRayInpolygon(polygon inputPolygon, halfLine ray);
+cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
+
+cartesianPlan planOfPolygon(polygon inputPolygon); //done
+
+bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
