@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include "geometric3DTools.h"
 
-point setCamera(int x, int y, int z){
-  point camera;
-  point.x = x;
-  point.y = y;
-  point.z = z;
-  
-  return point;
+point setPoint(int x, int y, int z){
+  point a;
+  a.x = x;
+  a.y = y;
+  a.z = z;
+
+  return camera;
 }
 
 vector setVector(point a, point b){
@@ -18,6 +18,13 @@ vector setVector(point a, point b){
   u.y = b.y - a.y;
   u.z = b.z - a.z;
   return u;
+}
+
+polygon setPolygon(int pointNbr, point* vertex){
+  polygon poly;
+  poly.pointNbr = pointNbr;
+  poly.vertex = vertex;
+  return poly;
 }
 
 vector qTimeVector(int k, vector u){

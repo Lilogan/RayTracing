@@ -50,7 +50,7 @@ typedef struct polygon_{
 } polygon;
 
 typedef struct surface_{
-  // ax + by + cz + d = 0 avec degrés 
+  // ax + by + cz + d = 0 avec degrés
   float a;
   float b;
   float c;
@@ -60,7 +60,11 @@ typedef struct surface_{
   int degZ
 } surface;
 
+point setPoint(int x, int y, int z); //done
+
 vector setVector(point a, point b); //done
+
+polygon setPolygon(int pointNbr, point* vertex); //done
 
 vector qTimeVector(int k, vector u);//done
 
@@ -68,23 +72,23 @@ vector addVectors(vector u, vector v);//done
 
 vector substractVectors(vector u, vector v);//done
 
-float scalarVectors(vector u, vector v);//done
-
 float normVector(vector u);//done
+
+float scalarVectors(vector u, vector v);//done
 
 vector productVector(vector u, vector v);//done
 
-point intersectPlanHalfLine(cartesianPlan p, halfLine d); // done
-
-vector reflect(halfLine i, cartesianPlan p); //done
-
-vector refracte(halfLine i, cartesianPlan p);
-
 float calculParam(cartesianPlan p, halfLine d); //done
 
-cartesianPlan firstPlanIntersect(line line);
+point intersectPlanHalfLine(cartesianPlan p, halfLine d); // done
 
 vector normal(cartesianPlan p);//done
+
+// vector refracte(halfLine i, cartesianPlan p);
+
+// cartesianPlan firstPlanIntersect(line line);
+
+vector reflect(halfLine i, cartesianPlan p); //done
 
 cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 
