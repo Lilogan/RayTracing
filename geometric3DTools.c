@@ -36,8 +36,8 @@ float normVector(vector u){
   return sqrt(pow(u.x, 2) + pow(u.y, 2) + pow(u.z, 2));
 }
 
-vector scalarVectors(vector u, vector v){
-  return 1 / 2 * (normVector(u) + normVector(v) - normVector(soustractionvector(v, u)));
+float scalarVectors(vector u, vector v){
+  return 1 / 2 * (normVector(u) + normVector(v) - normVector(substractVectors(v, u)));
 }
 
 vector productVector(vector u, vector v){
@@ -57,7 +57,7 @@ float calculParam(cartesianPlan p, halfLine d){
 
 point intersect(cartesianPlan p, halfLine d){
   float calculatedParam = calculParam(p, d);
-  point returnedPoint = NULL;
+  point returnedPoint;
 
   if(d.min == true && d.param <= calculatedParam){
     returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
@@ -85,7 +85,7 @@ vector reflect(halfLine i, cartesianPlan p){
   vector incident;
   vector reflected;
   vector normal;
-  float incidentNorm; 
+  float incidentNorm;
   float normalNorm;
   incident = i.dir;
   incidentNorm = pow(normVector(incident),-1);
