@@ -1,15 +1,15 @@
-#pragma pack(1) 
+#pragma pack(1)
 
-typedef struct pixel_{
+typedef struct color_{
 	unsigned char red;
 	unsigned char green;
 	unsigned char blue;
-}pixel;
+}color;
 
 typedef struct image_{
 	int width;
 	int height;
-	pixel* data;
+	color* data;
 }image;
 
 struct bmpImageHead{
@@ -36,6 +36,6 @@ struct bmpFileHead{
 
 int save(image*,const char* fichier);
 image* newImage(int width,int height);
-void setPixel(image*,int i,int j,pixel p);
-pixel getPixel(image*,int i,int j);
+void setPixel(image*,int i,int j,color p);
+color getColor(image*,int i,int j);
 void delImage(image*);

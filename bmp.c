@@ -7,7 +7,7 @@ image* newImage(int width,int height){
 	image* I = malloc(sizeof(image));
 	I->width = width;
 	I->height = height;
-	I->data = calloc(1,width*height*sizeof(pixel*));
+	I->data = calloc(1,width*height*sizeof(color*));
 	return I;
 }
 
@@ -18,13 +18,13 @@ void delImage(image* I){
 	}
 }
 
-void setPixel(image* I,int i,int j,pixel p){
+void setPixel(image* I,int i,int j,color p){
 	if(I && i>=0 && i<I->width && j>=0 && j<I->height){
 		I->data[I->width*j+i] = p;
 	}
 }
 
-pixel getPixel(image* I,int i,int j){
+color getColor(image* I,int i,int j){
 	if(I && i>=0 && i<I->width && j>=0 && j<I->height){
 		return I->data[I->width*j+i];
 	}
@@ -33,7 +33,7 @@ pixel getPixel(image* I,int i,int j){
 int save(image* I,const char* fichier)
 {
 	struct bmpFileHead bfh;
-	pixel p;
+	color p;
 	int width = I->width;
 	int height = I->height;
 	int offset = sizeof(struct bmpFileHead);
@@ -63,7 +63,7 @@ int save(image* I,const char* fichier)
 
 	for(int j=0;j<height;j++){
 		for(int i=0;i<width;i++){
-			p = getPixel(I,i,height-j-1);
+			p = getColor(I,i,height-j-1);
 			bgr[0] = p.blue;
 			bgr[1] = p.green;
 			bgr[2] = p.red;
