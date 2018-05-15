@@ -1,5 +1,4 @@
 #include <math.h>
-#include "geometric3DTools.h"
 
 vector setVector(point a, point b){
   vector u;
@@ -36,10 +35,8 @@ float normVector(vector u){
   return sqrt(pow(u.x, 2) + pow(u.y, 2) + pow(u.z, 2));
 }
 
-float scalarVectors(vector u, vector v){
-  vector w;
-  w = u.x*v.x + u.y+v.y + u.z*v.z;
-  return w;
+vector scalarVectors(vector u, vector v){
+  return 1 / 2 * (normVector(u) + normVector(v) - normVector(soustractionvector(v, u)));
 }
 
 vector productVector(vector u, vector v){
@@ -50,55 +47,26 @@ vector productVector(vector u, vector v){
   return w;
 }
 
-point intersect(cartesianPlan p, halfLine d){
+float calculParam(cartesianPlan p, halfLine d){
   float calculatedParam;
-  point returnedPoint;
-  calculatedParam = -(p.a*d.point.x + p.b*d.point.y + p.c*d.point.z +p.d);
-  calculatedParam = calculatedParam/(p.a*d.dir.x + p.b*d.dir.y + p.c*d.dir.z);
+  calculatedParam = (-1 * (p.a * d.point.x + p.b * d.point.y + p.c * d.point.x + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
 
+  return calculatedParam;
+}
+
+point intersect(cartesianPlan p, halfLine d){
+  float calculatedParam = calculParam(p, d);
+  point returnedPoint = NULL;
+  
   if(d.min == true && d.param <= calculatedParam){
     returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
     returnedPoint.y = d.point.y + d.dir.y*calculatedParam;
     returnedPoint.z = d.point.z + d.dir.z*calculatedParam;
-  else if(d.min == false && d.param >= calculatedParam){
+  } else if(d.min == false && d.param >= calculatedParam){
     returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
     returnedPoint.y = d.point.y + d.dir.y*calculatedParam;
     returnedPoint.z = d.point.z + d.dir.z*calculatedParam;
   }
 
   return returnedPoint;
-
-}
-
-vector normal(cartesianPlan p){
-  vector normal;
-  normal.x = p.a;
-  normal.y = p.b;
-  normal.z = p.c;
-  return normal;
-}
-
-vector reflect(halfLine i, cartesianPlan p){
-  vector incident;
-  vector reflected;
-  vector normal;
-  float incidentNorm;
-  float normalNorm;
-  incident = i.dir;
-  incidentNorm = pow(normVector(incident),-1);
-  normal = normal(p);
-  normalNorm = pow(normVector(normal),-1);
-
-  float cosinus = scalarVectors(qTimeVector(normalNorm,normal), qTimeVector(-1*incidentNorm,incident));
-
-  if(cosinus >= -1 && cosinus <= 1){
-    reflected = qTimeVector(incidentNorm, incident) + 2*cosinus*qTimeVector(normalNorm, normal);
-  }
-  else{
-    reflected.x = 0;
-    reflected.y = 0;
-    reflected.z = 0;
-  }
-
-  return reflected;
 }
