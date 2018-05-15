@@ -9,7 +9,7 @@ point setPoint(int x, int y, int z){
   a.y = y;
   a.z = z;
 
-  return camera;
+  return a;
 }
 
 vector setVector(point a, point b){
