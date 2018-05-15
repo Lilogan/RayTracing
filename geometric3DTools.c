@@ -27,7 +27,7 @@ polygon setPolygon(int pointNbr, point* vertex){
   return poly;
 }
 
-polygon setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ){
+ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ){
   ovoide s;
   s.a = a;
   s.b = b;
@@ -214,73 +214,4 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray){
 
   return true;;
 
-}
-
-float distancePoints(point a, point b){
-  float distance;
-  distance = sqrt(pow(a.x-b.x,2) + pow(a.y-b.y,2) + pow(a.z-b.z,2));
-  return distance;
-}
-
-point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera){
-  float discriminant;
-  float a;
-  float b;
-  float c;
-  float t1;
-  float t2;
-  float distance1;
-  float distance2;
-  point* returnedPoint1 = malloc(sizeof(point));
-  point* returnedPoint2 = malloc(sizeof(point));
-  a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
-  b = 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c* ray.point.z);
-  b -= 2*(sphere.a * ray.dir.x + sphere.b * ray.dir.y + sphere.c * ray.dir.z);
-  c = pow(ray.point.x,2) + pow(ray.point.y,2) + pow(ray.point.z,2);
-  c += pow(sphere.a,2) + pow(sphere.b,2) + pow(sphere.c,2) - pow(sphere.d,2);
-  c -= 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c * ray.point.z);
-
-  discriminant = pow(b,2) - 4*a*c;
-
-  if(discriminant == 0){
-    t1 = -b/(2*a);
-    t2 = -b/(2*a);
-  }
-  else if(discriminant > 0){
-    t1 = (-b-sqrt(discriminant))/(2*a);
-    t2 = (-b+sqrt(discriminant))/(2*a);
-  }
-  else{
-    return NULL;
-  }
-
-  if(ray.min == true && ray.param <= t1){
-    returnedPoint1->x = (ray.point.x + ray.dir.x*t1);
-    returnedPoint1->y = (ray.point.y + ray.dir.y*t1);
-    returnedPoint1->z = (ray.point.z + ray.dir.z*t1);
-  } else if(ray.min == false && ray.param >= t1){
-    returnedPoint1->x = (ray.point.x + ray.dir.x*t1);
-    returnedPoint1->y = (ray.point.y + ray.dir.y*t1);
-    returnedPoint1->z = (ray.point.z + ray.dir.z*t1);
-  }
-
-  if(ray.min == true && ray.param <= t2){
-    returnedPoint2->x = (ray.point.x + ray.dir.x*t2);
-    returnedPoint2->y = (ray.point.y + ray.dir.y*t2);
-    returnedPoint2->z = (ray.point.z + ray.dir.z*t2);
-  } else if(ray.min == false && ray.param >= t2){
-    returnedPoint2->x = (ray.point.x + ray.dir.x*t2);
-    returnedPoint2->y = (ray.point.y + ray.dir.y*t2);
-    returnedPoint2->z = (ray.point.z + ray.dir.z*t2);
-  }
-
-  distance1 = distancePoints(camera, *returnedPoint1);
-  distance2 = distancePoints(camera, *returnedPoint2);
-
-  if(distance1 < distance2){
-    return returnedPoint1;
-  }
-  else{
-    return returnedPoint2;
-  }
 }

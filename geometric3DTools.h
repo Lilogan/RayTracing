@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdbool.h>
 
 typedef struct point_ {
@@ -43,9 +44,16 @@ typedef struct halfLine_{
   float param;
 } halfLine;
 
+typedef struct color_{
+  int r;
+  int g;
+  int b;
+} color;
+
 typedef struct polygon_{
   int pointNbr;
   point* vertex;
+  color color;
 } polygon;
 
 typedef struct ovoide_{
@@ -54,9 +62,9 @@ typedef struct ovoide_{
   float b;
   float c;
   float d;
-  int degZ;
-  int degY;
-  int degX;
+  int degX
+  int degY
+  int degZ
 } ovoide;
 
 point setPoint(int x, int y, int z); //done
@@ -96,5 +104,3 @@ cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 cartesianPlan planOfPolygon(polygon inputPolygon); //done
 
 bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
-
-point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera);
