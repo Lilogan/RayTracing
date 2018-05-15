@@ -1,4 +1,5 @@
 #include <math.h>
+#include "geometric3DTools.h"
 
 vector setVector(point a, point b){
   vector u;
@@ -57,7 +58,7 @@ float calculParam(cartesianPlan p, halfLine d){
 point intersect(cartesianPlan p, halfLine d){
   float calculatedParam = calculParam(p, d);
   point returnedPoint = NULL;
-  
+
   if(d.min == true && d.param <= calculatedParam){
     returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
     returnedPoint.y = d.point.y + d.dir.y*calculatedParam;
@@ -69,4 +70,38 @@ point intersect(cartesianPlan p, halfLine d){
   }
 
   return returnedPoint;
+
+}
+
+vector normal(cartesianPlan p){
+  vector normal;
+  normal.x = p.a;
+  normal.y = p.b;
+  normal.z = p.c;
+  return normal;
+}
+
+vector reflect(halfLine i, cartesianPlan p){
+  vector incident;
+  vector reflected;
+  vector normal;
+  float incidentNorm; 
+  float normalNorm;
+  incident = i.dir;
+  incidentNorm = pow(normVector(incident),-1);
+  normal = normal(p);
+  normalNorm = pow(normVector(normal),-1);
+
+  float cosinus = scalarVectors(qTimeVector(normalNorm,normal), qTimeVector(-1*incidentNorm,incident));
+
+  if(cosinus >= -1 && cosinus <= 1){
+    reflected = qTimeVector(incidentNorm, incident) + 2*cosinus*qTimeVector(normalNorm, normal);
+  }
+  else{
+    reflected.x = 0;
+    reflected.y = 0;
+    reflected.z = 0;
+  }
+
+  return reflected;
 }
