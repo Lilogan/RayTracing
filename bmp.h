@@ -10,27 +10,26 @@ typedef struct image_{
 	pixel* data;
 }image;
 
-typedef struct imgHeadBmp_{
-  int size;
-  int width;
-  int height;
-  short nbPlan;
-  short bpp;
-  int compress;
-  int sizeImg;
-  int hRes;
-  int vRes;
-  int colPalette;
-  int imColPalette;
-}imgHeadBmp;
+typedef struct headerImageBmp_{
+  unsigned int sizeHeader;
+  unsigned int width;
+  unsigned int height;
+  unsigned short planes;
+  unsigned short bitCount;
+  unsigned int compress;
+  unsigned int sizeImg;
+  unsigned int xPpm;
+  unsigned int yPpm;
+  unsigned int clrUsed;
+  unsigned int clrImportant;
+}headerImageBmp;
 
-typedef struct headBmp_{
-  char sign[2];
-  int size;
-  int rsv;
-  int offset;
-  imgHeadBmp imgHead;
-}headBmp;
+typedef struct headerBmp_{
+  unsigned char type[2];
+  unsigned int fileSize;
+  unsigned int rsv;
+  unsigned int offset;
+}headerBmp;
 
 image* newImage(int width,int height);
 void setPixel(image*,int i,int j,pixel p);

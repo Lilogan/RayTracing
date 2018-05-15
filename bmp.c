@@ -20,32 +20,38 @@ pixel getPixel(image* I,int i,int j){
 }
 
 int save(image* I,const char* file){
-	headBmp head;
+	bfherBmp bfh;
+	bfherImageBmp bih
 	pixel p;
 	int i;
 	int j;
-	int sizedata;
+	int imageSize;
+	int fileSize;
 	int pitch;
 	unsigned char bgr[3];
 	char corrpitch[4] = {0,3,2,1};
-	FILE* F = fopen(file,"w+");
+	FILE* F = fopen(file,"wb");
 	if (F == NULL){
 		return -1;
 	}
-	memset(&head,0,sizeof(headBmp));
-	head.sign[0] = 'B';
-	head.sign[1] = 'M';
-	head.offset = sizeof(headBmp);
-	head.imgHead.size = sizeof(imgHeadBmp);
-	head.imgHead.width = I->width;
-	head.imgHead.height = I->height;
-	head.imgHead.nbPlan = 1;
-	head.imgHead.bpp = 24;
-	pitch = corrpitch[(3*head.imgHead.width)%4];
-	sizedata = 3*head.imgHead.height*head.imgHead.width + head.imgHead.height*pitch;
-	head.imgHead.size = sizedata;
-	head.size = head.offset + head.imgHead.size;
-	fwrite(&head,sizeof(headBmp),1,F);
+	imageSize = 3*I->height*I->width + I->height*pitch;
+	fileSize = 54 + 4 * imageSize;
+	pitch = corrpitch[(3*I->width)%4];;
+	memset(&bfh,0,sizeof(bfh));
+	memset(&bih,0,sizeof(bih))
+	bfh.sign[0] = 'B';
+	bfh.sign[1] = 'M';
+	bfh.fileSize = fileSize
+	bih.size = sizeof(bih);
+	bih.width = I->width;
+	bih.height = I->height;
+	bih.planes= 1;
+	bih.bitCount = 24;
+	pitch = corrpitch[(3*bih.width)%4];
+	bih.size = sizeData;
+	bfh.size = bfh.offset + bih.size;
+	fwrite(&bfh,1,sizeof(bfh),F);
+	fwrite(&bih,1,sizeof(bih),F);
 
 	for(j=0;j<I->height;j++){
 		for(i=0;i<I->width;i++){
