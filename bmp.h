@@ -34,8 +34,9 @@ struct bmpFileHead{
 	struct bmpImageHead bih;
 };
 
-int save(image*,const char* fichier);
+color setColor(unsigned char red, unsigned char green, unsigned char blue);
 image* newImage(int width,int height);
+void delImage(image*);
 void setPixel(image*,int i,int j,color p);
 color getColor(image*,int i,int j);
-void delImage(image*);
+int save(image*,const char* fichier);

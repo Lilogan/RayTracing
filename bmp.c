@@ -3,6 +3,14 @@
 #include <string.h>
 #include "bmp.h"
 
+color setColor(unsigned char red, unsigned char green, unsigned char blue){
+	color col;
+	col.red = red;
+	col.green = green;
+	col.blue = blue;
+	return col;
+}
+
 image* newImage(int width,int height){
 	image* I = malloc(sizeof(image));
 	I->width = width;
