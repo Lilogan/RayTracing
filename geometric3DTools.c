@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "geometric3DTools.h"
 
+
 point setPoint(int x, int y, int z){
   point a;
   a.x = x;
@@ -36,6 +37,15 @@ ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int deg
   s.degY = degY;
   s.degZ = degZ;
   return s;
+}
+
+cartesianPlan setplanCartesian(vector normal, point randPoint){
+  cartesianPlan returned;
+  returned.a = normal.x;
+  returned.b = normal.y;
+  returned.c = normal.z;
+  returned.d = -(normal.x * randPoint.x + normal.y * randPoint.y + normal.z * randPoint.z);
+  return returned;
 }
 
 halfLine setHalfLine(point origin, point randPoint){
@@ -95,21 +105,26 @@ float calculParam(cartesianPlan p, halfLine d){
   return calculatedParam;
 }
 
-point intersectPlanHalfLine(cartesianPlan p, halfLine d){
+point* intersectPlanHalfLine(cartesianPlan p, halfLine d){
   float calculatedParam = calculParam(p, d);
-  point returnedPoint;
+  point* returnedPoint = malloc(sizeof(point));
 
   if(d.min == true && d.param <= calculatedParam){
-    returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
-    returnedPoint.y = d.point.y + d.dir.y*calculatedParam;
-    returnedPoint.z = d.point.z + d.dir.z*calculatedParam;
+    returnedPoint->x = d.point.x + d.dir.x*calculatedParam;
+    returnedPoint->y = d.point.y + d.dir.y*calculatedParam;
+    returnedPoint->z = d.point.z + d.dir.z*calculatedParam;
+    return returnedPoint;
   } else if(d.min == false && d.param >= calculatedParam){
-    returnedPoint.x = d.point.x + d.dir.x*calculatedParam;
-    returnedPoint.y = d.point.y + d.dir.y*calculatedParam;
-    returnedPoint.z = d.point.z + d.dir.z*calculatedParam;
+    returnedPoint->x = d.point.x + d.dir.x*calculatedParam;
+    returnedPoint->y = d.point.y + d.dir.y*calculatedParam;
+    returnedPoint->z = d.point.z + d.dir.z*calculatedParam;
+    return returnedPoint;
+  }
+  else{
+    return NULL;
   }
 
-  return returnedPoint;
+
 
 }
 
@@ -180,7 +195,7 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray){
   cartesianPlan polygonPlan;
   cartesianPlan normalPlan;
   int vertexNbr;
-  point intersection;
+  point* intersection;
   vector planVector;
   vector normalVector;
   bool* symbol;
@@ -207,7 +222,7 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray){
       planVector = setVector(*(inputPolygon.vertex+i), *(inputPolygon.vertex+i+1));
     }
     normalPlan = definePlan(planVector, normalVector, *(inputPolygon.vertex+i));
-    result = normalPlan.a*intersection.x + normalPlan.b*intersection.y + normalPlan.c*intersection.z + normalPlan.d;
+    result = normalPlan.a*intersection->x + normalPlan.b*intersection->y + normalPlan.c*intersection->z + normalPlan.d;
     if(result >= 0){
       *(symbol+i) = true;
     }
@@ -232,7 +247,7 @@ float distancePoints(point a, point b){
   return distance;
 }
 
-point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera){
+point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point camera){
   float discriminant;
   float a;
   float b;
@@ -255,12 +270,10 @@ point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera){
   if(discriminant == 0){
     t1 = -b/(2*a);
     t2 = -b/(2*a);
-  }
-  else if(discriminant > 0){
+  } else if(discriminant > 0){
     t1 = (-b-sqrt(discriminant))/(2*a);
     t2 = (-b+sqrt(discriminant))/(2*a);
-  }
-  else{
+  } else{
     return NULL;
   }
 
@@ -293,4 +306,11 @@ point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera){
   else{
     return returnedPoint2;
   }
+}
+
+bool comparePoints(point a, point b){
+  if(a.x == b.x && a.y && b.y && a.z == b.z){
+    return true;
+  }
+  return false;
 }
