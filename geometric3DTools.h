@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdbool.h>
 
 typedef struct point_ {
   //A = (x,y,z)
@@ -7,61 +8,65 @@ typedef struct point_ {
   float z;
 } point;
 
-typedef struct planCartesien_ {
+typedef struct cartesianPlan_{
   //ax+by+cs+d=0
   float a;
   float b;
   float c;
   float d;
-} planCartesien;
+}cartesianPlan;
 
-typedef struct planParametrique_{
-  vecteur dir1;
-  vecteur dir2;
-  point point;
-} planParametrique;
-
-typedef struct vecteur_ {
+typedef struct vector_ {
   //A= (x,y,z)
   float x;
   float y;
   float z;
-} vecteur;
+}vector;
 
-typedef struct droite_{
-	vecteur dir;
+typedef struct parametricPlan_{
+  vector dir1;
+  vector dir2;
   point point;
-}droite;
+} parametricPlan;
 
-typedef struct demiDroite_{
-	vecteur dir;
+
+typedef struct line_{
+	vector dir;
   point point;
-  float paramMin;
-}demiDroite;
+}line;
 
-typedef struct polygone_{
-  int nbrePoint;
-  point* sommets;
-}
+typedef struct halfLine_{
+  // min = true => define a minimum
+  // min = false => define a maximum
+	vector dir;
+  point point;
+  bool min;
+  float param;
+}halfLine;
 
-vecteur qFoisVecteur(int k, vecteur u);
+typedef struct polygon_{
+  int pointNbre;
+  point* vertex;
+}polygon;
 
-vecteur additionVecteurs(vecteur u, vecteur v);
+vector qTimeVector(int k, vector u);//done
 
-vecteur soustractionVecteurs(vecteur u, vecteur v);
+vector addVectors(vector u, vector v);//done
 
-vecteur scalaireVecteurs(vecteur u, vecteur v);
+vector substractVectors(vector u, vector v);//done
 
-float normeVecteur(vecteur u);
+float scalarVectors(vector u, vector v);//done
 
-vecteur produitVectoriel(vecteur u, vecteur v);
+float normVector(vector u);//done
 
-point intersection(planCartesien p, droite d);
+vector productVector(vector u, vector v);//done
 
-vecteur reflechi(vecteur i, planCartesien p);
+point intersect(cartesianPlan p, halfLine d); // done
 
-vecteur refracte(vecteur i, planCartesien p);
+vector reflect(halfLine i, cartesianPlan p); //done
 
-planCartesien premierEltRencontre(point obs, vecteur ray);
+vector refracte(halfLine i, cartesianPlan p);
 
-vecteur normale(planCartesien p);
+cartesianPlan firstPlanIntersect(line line);
+
+vector normal(cartesianPlan p);//done
