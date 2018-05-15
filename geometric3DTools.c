@@ -84,18 +84,18 @@ vector normal(cartesianPlan p){
 vector reflect(halfLine i, cartesianPlan p){
   vector incident;
   vector reflected;
-  vector normal;
+  vector normalVec;
   float incidentNorm;
   float normalNorm;
   incident = i.dir;
   incidentNorm = pow(normVector(incident),-1);
-  normal = normal(p);
-  normalNorm = pow(normVector(normal),-1);
+  normalVec = normal(p);
+  normalNorm = pow(normVector(normalVec),-1);
 
-  float cosinus = scalarVectors(qTimeVector(normalNorm,normal), qTimeVector(-1*incidentNorm,incident));
+  float cosinus = scalarVectors(qTimeVector(normalNorm,normalVec), qTimeVector(-1*incidentNorm,incident));
 
   if(cosinus >= -1 && cosinus <= 1){
-    reflected = qTimeVector(incidentNorm, incident) + 2*cosinus*qTimeVector(normalNorm, normal);
+    reflected = addVectors(qTimeVector(incidentNorm, incident), qTimeVector(2*cosinus,qTimeVector(normalNorm, normalVec)));
   }
   else{
     reflected.x = 0;
@@ -104,4 +104,17 @@ vector reflect(halfLine i, cartesianPlan p){
   }
 
   return reflected;
+}
+
+bool inRayInpolygon(polygon inputPolygon, halfLine ray){
+  int nbreVertex;
+  vector vectorDir1;
+  vector vectorDir2;
+
+  nbreVertex = inputPolygon.pointNbre;
+
+  if(nbreVertex > 2){
+    vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+1));
+    vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+2));
+  }
 }
