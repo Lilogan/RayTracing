@@ -1,4 +1,3 @@
-#include <math.h>
 #include <stdbool.h>
 
 typedef struct point_ {
@@ -55,9 +54,9 @@ typedef struct surface_{
   float b;
   float c;
   float d;
-  int degX
-  int degY
-  int degZ
+  int degX;
+  int degY;
+  int degZ;
 } surface;
 
 point setPoint(int x, int y, int z); //done
@@ -95,3 +94,5 @@ cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 cartesianPlan planOfPolygon(polygon inputPolygon); //done
 
 bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
+
+point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera);
