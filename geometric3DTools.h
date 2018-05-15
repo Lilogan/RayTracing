@@ -65,6 +65,8 @@ vector setVector(point a, point b); //done
 
 polygon setPolygon(int pointNbr, point* vertex); //done
 
+halfLine setHalfLine(point origin, point randPoint);
+
 vector qTimeVector(int k, vector u);//done
 
 vector addVectors(vector u, vector v);//done

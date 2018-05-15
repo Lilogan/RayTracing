@@ -20,6 +20,18 @@ vector setVector(point a, point b){
   return u;
 }
 
+halfLine setHalfLine(point origin, point randPoint){
+  vector dir;
+  halfLine returned;
+  dir = setVector(origin, randPoint);
+  retuned.dir = dir;
+  returned.point = origin;
+  returned.min = true;
+  returned.param = 0;
+
+  return returned;
+}
+
 polygon setPolygon(int pointNbr, point* vertex){
   polygon poly;
   poly.pointNbr = pointNbr;
