@@ -1,38 +1,41 @@
+#pragma pack(1) 
+
 typedef struct pixel_{
 	unsigned char red;
-  unsigned char green;
-  unsigned char blue;
+	unsigned char green;
+	unsigned char blue;
 }pixel;
 
 typedef struct image_{
 	int width;
-  int height;
+	int height;
 	pixel* data;
 }image;
 
-typedef struct headerImageBmp_{
-  unsigned int sizeHeader;
-  unsigned int width;
-  unsigned int height;
-  unsigned short planes;
-  unsigned short bitCount;
-  unsigned int compress;
-  unsigned int sizeImg;
-  unsigned int xPpm;
-  unsigned int yPpm;
-  unsigned int clrUsed;
-  unsigned int clrImportant;
-}headerImageBmp;
+struct bmpImageHead{
+	int sizeHeader;
+	int width;
+	int height;
+	short planes;
+	short bitCount;
+	int compress;
+	int sizeImage;
+	int xPpm;
+	int yPpm;
+	int clrUsed;
+	int clrImportant;
+};
 
-typedef struct headerBmp_{
-  unsigned char type[2];
-  unsigned int fileSize;
-  unsigned int rsv;
-  unsigned int offset;
-}headerBmp;
+struct bmpFileHead{
+	char type[2];
+	int sizeFile;
+	int reserved;
+	int offset;
+	struct bmpImageHead bih;
+};
 
+int save(image*,const char* fichier);
 image* newImage(int width,int height);
 void setPixel(image*,int i,int j,pixel p);
 pixel getPixel(image*,int i,int j);
-int save(image*,const char* file);
 void delImage(image*);

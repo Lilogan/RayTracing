@@ -3,76 +3,75 @@
 #include <string.h>
 #include "bmp.h"
 
-image* newImage(int w,int h){
+image* newImage(int width,int height){
 	image* I = malloc(sizeof(image));
-	I->width = w;
-	I->height = h;
-	I->data = calloc(1,w*h*sizeof(pixel*));
+	I->width = width;
+	I->height = height;
+	I->data = calloc(1,width*height*sizeof(pixel*));
 	return I;
 }
 
+void delImage(image* I){
+	if (I != NULL){
+		free(I->data);
+		free(I);
+	}
+}
+
 void setPixel(image* I,int i,int j,pixel p){
-	I->data[I->width*j+i] = p;
+	if(I && i>=0 && i<I->width && j>=0 && j<I->height){
+		I->data[I->width*j+i] = p;
+	}
 }
 
 pixel getPixel(image* I,int i,int j){
-	return I->data[I->width*j+i];
+	if(I && i>=0 && i<I->width && j>=0 && j<I->height){
+		return I->data[I->width*j+i];
+	}
 }
 
-int save(image* I,const char* file){
-	bfherBmp bfh;
-	bfherImageBmp bih
+int save(image* I,const char* fichier)
+{
+	struct bmpFileHead bfh;
 	pixel p;
-	int i;
-	int j;
-	int imageSize;
-	int fileSize;
-	int pitch;
-	unsigned char bgr[3];
+	int width = I->width;
+	int height = I->height;
+	int offset = sizeof(struct bmpFileHead);
+	int sizeHeader = sizeof(struct bmpImageHead);
 	char corrpitch[4] = {0,3,2,1};
-	FILE* F = fopen(file,"wb");
-	if (F == NULL){
+	int pitch = corrpitch[(3*width)%4];
+	int sizeImage = 3*height*width + height*pitch;
+	unsigned char bgr[3];
+
+	FILE* F = fopen(fichier,"wb");
+	if (!F){
 		return -1;
 	}
-	imageSize = 3*I->height*I->width + I->height*pitch;
-	fileSize = 54 + 4 * imageSize;
-	pitch = corrpitch[(3*I->width)%4];;
-	memset(&bfh,0,sizeof(bfh));
-	memset(&bih,0,sizeof(bih))
-	bfh.sign[0] = 'B';
-	bfh.sign[1] = 'M';
-	bfh.fileSize = fileSize
-	bih.size = sizeof(bih);
-	bih.width = I->width;
-	bih.height = I->height;
-	bih.planes= 1;
-	bih.bitCount = 24;
-	pitch = corrpitch[(3*bih.width)%4];
-	bih.size = sizeData;
-	bfh.size = bfh.offset + bih.size;
-	fwrite(&bfh,1,sizeof(bfh),F);
-	fwrite(&bih,1,sizeof(bih),F);
 
-	for(j=0;j<I->height;j++){
-		for(i=0;i<I->width;i++){
-			p = getPixel(I,i,I->height-j-1);
+	memset(&bfh,0,sizeof(struct bmpFileHead));
+	bfh.type[0] = 'B';
+	bfh.type[1] = 'M';
+	bfh.sizeFile = offset + sizeImage;
+	bfh.offset = offset;
+	bfh.bih.sizeHeader = sizeHeader;
+	bfh.bih.width = width;
+	bfh.bih.height = height;
+	bfh.bih.sizeImage = sizeImage;
+	bfh.bih.planes = 1;
+	bfh.bih.bitCount = 24;
+	fwrite(&bfh,sizeof(struct bmpFileHead),1,F);
+
+	for(int j=0;j<height;j++){
+		for(int i=0;i<width;i++){
+			p = getPixel(I,i,height-j-1);
 			bgr[0] = p.blue;
 			bgr[1] = p.green;
 			bgr[2] = p.red;
 			fwrite(&bgr,1,3,F);
 		}
-		bgr[0] = 0;
-		bgr[1] = 0;
-		bgr[2] = 0;
+		bgr[0] = bgr[1] = bgr[2] = 0;
 		fwrite(&bgr,1,pitch,F);
 	}
 	fclose(F);
 	return 0;
-}
-
-void delImage(image* I){
-	if (I){
-		free(I->data);
-		free(I);
-	}
 }
