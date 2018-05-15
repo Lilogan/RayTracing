@@ -8,7 +8,6 @@ point setPoint(int x, int y, int z){
   a.x = x;
   a.y = y;
   a.z = z;
-
   return a;
 }
 
@@ -37,6 +36,17 @@ ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int deg
   s.degY = degY;
   s.degZ = degZ;
   return s;
+}
+
+halfLine setHalfLine(point origin, point randPoint){
+  vector dir;
+  halfLine returned;
+  dir = setVector(origin, randPoint);
+  returned.dir = dir;
+  returned.point = origin;
+  returned.min = true;
+  returned.param = 0;
+  return returned;
 }
 
 vector qTimeVector(int k, vector u){
@@ -283,4 +293,4 @@ point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera){
   else{
     return returnedPoint2;
   }
-} 
+}

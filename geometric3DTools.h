@@ -9,7 +9,7 @@ typedef struct point_ {
 } point;
 
 typedef struct cartesianPlan_{
-  //ax+by+cs+d=0
+  //ax+by+cz+d=0
   float a;
   float b;
   float c;
@@ -73,9 +73,9 @@ vector setVector(point a, point b); //done
 
 polygon setPolygon(int pointNbr, point* vertex); //done
 
-halfLine setHalfLine(point origin, point randPoint);
+ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ); //done
 
-ovoide setOvoide();
+halfLine setHalfLine(point origin, point randPoint); //done
 
 vector qTimeVector(int k, vector u);//done
 
@@ -106,3 +106,7 @@ cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 cartesianPlan planOfPolygon(polygon inputPolygon); //done
 
 bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
+
+float distancePoints(point a, point b); //done
+
+point* intersectSphereHalfLine(surface sphere, halfLine ray, point camera); //done
