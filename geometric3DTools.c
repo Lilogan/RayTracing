@@ -1,4 +1,6 @@
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "geometric3DTools.h"
 
 vector setVector(point a, point b){
@@ -106,15 +108,82 @@ vector reflect(halfLine i, cartesianPlan p){
   return reflected;
 }
 
-bool inRayInpolygon(polygon inputPolygon, halfLine ray){
-  int nbreVertex;
+cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint){
+  cartesianPlan plan;
+  plan.a = dir1.y * dir2.z - dir1.z * dir2.y;
+  plan.b = dir1.z * dir2.x - dir1.x * dir2.z;
+  plan.c = dir1.x * dir2.y - dir1.y * dir2.x;
+  plan.d = -(plan.a * insidePoint.x + plan.b * insidePoint.y + plan.c * insidePoint.z);
+  return plan;
+}
+
+cartesianPlan planOfPolygon(polygon inputPolygon){
+  int vertexNbr;
   vector vectorDir1;
   vector vectorDir2;
+  cartesianPlan polygonPlan;
 
-  nbreVertex = inputPolygon.pointNbre;
-
-  if(nbreVertex > 2){
+  vertexNbr = inputPolygon.pointNbr;
+  if(vertexNbr > 2){
     vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+1));
     vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+2));
+    polygonPlan = definePlan(vectorDir1, vectorDir2, *inputPolygon.vertex);
   }
+  else{
+    polygonPlan.a = 0;
+    polygonPlan.b = 0;
+    polygonPlan.c = 0;
+    polygonPlan.d = 0;
+  }
+  return polygonPlan;
+}
+
+bool inRayInpolygon(polygon inputPolygon, halfLine ray){
+  cartesianPlan polygonPlan;
+  cartesianPlan normalPlan;
+  int vertexNbr;
+  point intersection;
+  vector planVector;
+  vector normalVector;
+  bool* symbol;
+
+  vertexNbr = inputPolygon.pointNbr;
+  symbol = malloc(vertexNbr*sizeof(bool));
+  polygonPlan = planOfPolygon(inputPolygon);
+
+  if(polygonPlan.a == 0 && polygonPlan.b == 0 && polygonPlan.c == 0 && polygonPlan.d == 0){
+    return false;
+  }
+
+  intersection = intersect(polygonPlan, ray);
+  normalVector.x = polygonPlan.a;
+  normalVector.y = polygonPlan.b;
+  normalVector.z = polygonPlan.c;
+  float result;
+
+  for(int i = 0; i < vertexNbr; i++){
+    if(i == vertexNbr-1){
+      planVector = setVector(*(inputPolygon.vertex), *(inputPolygon.vertex+i));
+    }
+    else{
+      planVector = setVector(*(inputPolygon.vertex+i), *(inputPolygon.vertex+i+1));
+    }
+    normalPlan = definePlan(planVector, normalVector, *(inputPolygon.vertex+i));
+    result = normalPlan.a*intersection.x + normalPlan.b*intersection.y + normalPlan.c*intersection.z + normalPlan.d;
+    if(result >= 0){
+      *(symbol+i) = true;
+    }
+    else{
+      *(symbol+i) = false;
+    }
+  }
+
+  for(int i = 0; i < vertexNbr; i++){
+    if(*(symbol+i) != *(symbol+i+1)){
+      return false;
+    }
+  }
+
+  return true;;
+
 }

@@ -45,7 +45,7 @@ typedef struct halfLine_{
 }halfLine;
 
 typedef struct polygon_{
-  int pointNbre;
+  int pointNbr;
   point* vertex;
 }polygon;
 
@@ -70,3 +70,5 @@ vector refracte(halfLine i, cartesianPlan p);
 cartesianPlan firstPlanIntersect(line line);
 
 vector normal(cartesianPlan p);//done
+
+bool inRayInpolygon(polygon inputPolygon, halfLine ray);
