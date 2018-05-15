@@ -39,7 +39,7 @@ ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int deg
   return s;
 }
 
-cartesianPlan setplanCartesian(vector normal, point randPoint){
+cartesianPlan setPlanCartesian(vector normal, point randPoint){
   cartesianPlan returned;
   returned.a = normal.x;
   returned.b = normal.y;
@@ -53,7 +53,7 @@ halfLine setHalfLine(point origin, point randPoint){
   halfLine returned;
   dir = setVector(origin, randPoint);
   returned.dir = dir;
-  returned.point = origin;
+  returned.randPoint = origin;
   returned.min = true;
   returned.param = 0;
   return returned;
@@ -100,7 +100,7 @@ vector productVector(vector u, vector v){
 
 float calculParam(cartesianPlan p, halfLine d){
   float calculatedParam;
-  calculatedParam = (-1 * (p.a * d.point.x + p.b * d.point.y + p.c * d.point.x + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
+  calculatedParam = (-1 * (p.a * d.randPoint.x + p.b * d.randPoint.y + p.c * d.randPoint.x + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
 
   return calculatedParam;
 }
@@ -110,14 +110,14 @@ point* intersectPlanHalfLine(cartesianPlan p, halfLine d){
   point* returnedPoint = malloc(sizeof(point));
 
   if(d.min == true && d.param <= calculatedParam){
-    returnedPoint->x = d.point.x + d.dir.x*calculatedParam;
-    returnedPoint->y = d.point.y + d.dir.y*calculatedParam;
-    returnedPoint->z = d.point.z + d.dir.z*calculatedParam;
+    returnedPoint->x = d.randPoint.x + d.dir.x*calculatedParam;
+    returnedPoint->y = d.randPoint.y + d.dir.y*calculatedParam;
+    returnedPoint->z = d.randPoint.z + d.dir.z*calculatedParam;
     return returnedPoint;
   } else if(d.min == false && d.param >= calculatedParam){
-    returnedPoint->x = d.point.x + d.dir.x*calculatedParam;
-    returnedPoint->y = d.point.y + d.dir.y*calculatedParam;
-    returnedPoint->z = d.point.z + d.dir.z*calculatedParam;
+    returnedPoint->x = d.randPoint.x + d.dir.x*calculatedParam;
+    returnedPoint->y = d.randPoint.y + d.dir.y*calculatedParam;
+    returnedPoint->z = d.randPoint.z + d.dir.z*calculatedParam;
     return returnedPoint;
   }
   else{
@@ -243,7 +243,7 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray){
 
 float distancePoints(point a, point b){
   float distance;
-  distance = sqrt(pow(b.x-a.x,2) + pow(b.y-a.y,2) + pow(b.z-a.z,2));
+  distance = pow(pow(b.x-a.x,2) + pow(b.y-a.y,2) + pow(b.z-a.z,2),0.5);
   return distance;
 }
 
@@ -268,8 +268,8 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point distancePoint)
 
 
   a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
-  b = 2 * (ray.dir.x * (ray.point.x - sphere.a) + ray.dir.y * (ray.point.y - sphere.b) + ray.dir.z * (ray.point.z - sphere.c));
-  c = (pow(ray.point.x - sphere.a, 2) + pow(ray.point.y - sphere.b, 2) + pow(ray.point.z - sphere.c, 2)) - sphere.d;
+  b = 2 * (ray.dir.x * (ray.randPoint.x - sphere.a) + ray.dir.y * (ray.randPoint.y - sphere.b) + ray.dir.z * (ray.randPoint.z - sphere.c));
+  c = (pow(ray.randPoint.x - sphere.a, 2) + pow(ray.randPoint.y - sphere.b, 2) + pow(ray.randPoint.z - sphere.c, 2)) - sphere.d;
 
   discriminant = pow(b,2) - 4*a*c;
   if(discriminant == 0){
@@ -283,23 +283,23 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point distancePoint)
   }
 
   if(ray.min == true && ray.param <= t1){
-    returnedPoint1->x = (ray.point.x + ray.dir.x*t1);
-    returnedPoint1->y = (ray.point.y + ray.dir.y*t1);
-    returnedPoint1->z = (ray.point.z + ray.dir.z*t1);
+    returnedPoint1->x = (ray.randPoint.x + ray.dir.x*t1);
+    returnedPoint1->y = (ray.randPoint.y + ray.dir.y*t1);
+    returnedPoint1->z = (ray.randPoint.z + ray.dir.z*t1);
   } else if(ray.min == false && ray.param >= t1){
-    returnedPoint1->x = (ray.point.x + ray.dir.x*t1);
-    returnedPoint1->y = (ray.point.y + ray.dir.y*t1);
-    returnedPoint1->z = (ray.point.z + ray.dir.z*t1);
+    returnedPoint1->x = (ray.randPoint.x + ray.dir.x*t1);
+    returnedPoint1->y = (ray.randPoint.y + ray.dir.y*t1);
+    returnedPoint1->z = (ray.randPoint.z + ray.dir.z*t1);
   }
 
   if(ray.min == true && ray.param <= t2){
-    returnedPoint2->x = (ray.point.x + ray.dir.x*t2);
-    returnedPoint2->y = (ray.point.y + ray.dir.y*t2);
-    returnedPoint2->z = (ray.point.z + ray.dir.z*t2);
+    returnedPoint2->x = (ray.randPoint.x + ray.dir.x*t2);
+    returnedPoint2->y = (ray.randPoint.y + ray.dir.y*t2);
+    returnedPoint2->z = (ray.randPoint.z + ray.dir.z*t2);
   } else if(ray.min == false && ray.param >= t2){
-    returnedPoint2->x = (ray.point.x + ray.dir.x*t2);
-    returnedPoint2->y = (ray.point.y + ray.dir.y*t2);
-    returnedPoint2->z = (ray.point.z + ray.dir.z*t2);
+    returnedPoint2->x = (ray.randPoint.x + ray.dir.x*t2);
+    returnedPoint2->y = (ray.randPoint.y + ray.dir.y*t2);
+    returnedPoint2->z = (ray.randPoint.z + ray.dir.z*t2);
   }
   else{
     return NULL;
@@ -307,10 +307,6 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point distancePoint)
 
   distance1 = distancePoints(distancePoint, *returnedPoint1);
   distance2 = distancePoints(distancePoint, *returnedPoint2);
-  printf("%f %f\n",distance1, distance2);
-  printf("%f %f\n",returnedPoint1->x, returnedPoint2->x);
-  printf("%f %f\n",returnedPoint1->y, returnedPoint2->y);
-  printf("%f %f\n\n",returnedPoint1->z, returnedPoint2->z);
   if(distance1 < distance2){
     return returnedPoint1;
   }
@@ -320,7 +316,7 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point distancePoint)
 }
 
 bool comparePoints(point a, point b){
-  if((trunc(a.x) == trunc(b.x)) && (trunc(a.y) == trunc(b.y)) && (trunc(a.z) == trunc(b.z))){
+  if(trunc(a.x-b.x)==0 && trunc(a.y-b.y)==0 && trunc(a.z-b.z) == 0){
     return true;
   }
   return false;

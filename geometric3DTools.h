@@ -39,7 +39,7 @@ typedef struct halfLine_{
   // min = true => define a minimum
   // min = false => define a maximum
 	vector dir;
-  point point;
+  point randPoint;
   bool min;
   float param;
 } halfLine;
@@ -68,7 +68,7 @@ polygon setPolygon(int pointNbr, point* vertex); //done
 
 ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ); //done
 
-cartesianPlan setplanCartesian(vector normal, point randPoint); //done
+cartesianPlan setPlanCartesian(vector normal, point randPoint); //done
 
 halfLine setHalfLine(point origin, point randPoint); //done
 

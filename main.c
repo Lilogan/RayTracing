@@ -11,6 +11,7 @@ int main(){
   color gris = setColor(144,144,144);
   color rougeClair = setColor(255,0,0);
   color rougeFonce = setColor(100,0,0);
+  color noir = setColor(0,0,0);
 
   point tabPtsEcran[4];
   tabPtsEcran[0] = setPoint(0, 0, 200);
@@ -21,11 +22,11 @@ int main(){
 
   cartesianPlan sol;
   vector dir = setVector(tabPtsEcran[0], tabPtsEcran[1]);
-  sol = setplanCartesian(dir, tabPtsEcran[0]);
+  sol = setPlanCartesian(dir, tabPtsEcran[1]);
 
-  point* pointIntersect;
-  point* pointIntersect2;
-  point lamp = setPoint(100, -50, 400);
+  point* pointIntersect = malloc(sizeof(point));
+  point* pointIntersect2 = malloc(sizeof(point));
+  point lamp = setPoint(200, 0, 200);
   ovoide S = setOvoide(100, -50, 100, 500, 2, 2, 2);
   int y = 0;
 
@@ -36,23 +37,36 @@ int main(){
       pointIntersect  = intersectSphereHalfLine(S, hL, camera);
 
       if(pointIntersect != NULL){
-        printf("%d %d \n",i,j);
         halfLine hL2 = setHalfLine(lamp,*pointIntersect);
         pointIntersect2 = intersectSphereHalfLine(S, hL2, lamp);
-        if(pointIntersect2 != NULL){
-          if(comparePoints(*pointIntersect, *pointIntersect2)){
-            setPixel(I,i,j,rougeClair);
-          } else{
-            setPixel(I,i,j,rougeFonce);
-          }
+
+        bool compar = comparePoints(*pointIntersect, *pointIntersect2);
+        if(compar){
+          setPixel(I,i,200-j,rougeClair);
         }
+        else{
+          setPixel(I,i,200-j,rougeFonce);
+        }
+
+
       }
       else if(intersectPlanHalfLine(sol, hL) != NULL){
-        setPixel(I,i,j ,gris);
+        point* pointIntersect3 = intersectPlanHalfLine(sol, hL);
+        halfLine hL3;
+
+        hL3 = setHalfLine(lamp, *pointIntersect3);
+        if(intersectSphereHalfLine(S,hL3, lamp) != NULL){
+          setPixel(I,i,200-j ,noir);
+        }
+        else{
+          setPixel(I,i,200-j ,gris);
+        }
+
       }
       else{
-        setPixel(I,i,j,blanc);
+        setPixel(I,i,200-j,blanc);
       }
+
     }
 
   }
