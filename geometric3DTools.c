@@ -179,7 +179,7 @@ cartesianPlan planOfPolygon(polygon inputPolygon){
   vertexNbr = inputPolygon.pointNbr;
   if(vertexNbr > 2){
     vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+1));
-    vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+2));
+    vectorDir2 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+2));
     polygonPlan = definePlan(vectorDir1, vectorDir2, *inputPolygon.vertex);
   }
   else{
@@ -243,11 +243,11 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray){
 
 float distancePoints(point a, point b){
   float distance;
-  distance = sqrt(pow(a.x-b.x,2) + pow(a.y-b.y,2) + pow(a.z-b.z,2));
+  distance = sqrt(pow(b.x-a.x,2) + pow(b.y-a.y,2) + pow(b.z-a.z,2));
   return distance;
 }
 
-point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point camera){
+point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point distancePoint){
   float discriminant;
   float a;
   float b;
@@ -258,15 +258,20 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point camera){
   float distance2;
   point* returnedPoint1 = malloc(sizeof(point));
   point* returnedPoint2 = malloc(sizeof(point));
+
+  // a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
+  // b = 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c* ray.point.z);
+  // b -= 2*(sphere.a * ray.dir.x + sphere.b * ray.dir.y + sphere.c * ray.dir.z);
+  // c = pow(ray.point.x,2) + pow(ray.point.y,2) + pow(ray.point.z,2);
+  // c += pow(sphere.a,2) + pow(sphere.b,2) + pow(sphere.c,2) - pow(sphere.d,2);
+  // c -= 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c * ray.point.z);
+
+
   a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
-  b = 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c* ray.point.z);
-  b -= 2*(sphere.a * ray.dir.x + sphere.b * ray.dir.y + sphere.c * ray.dir.z);
-  c = pow(ray.point.x,2) + pow(ray.point.y,2) + pow(ray.point.z,2);
-  c += pow(sphere.a,2) + pow(sphere.b,2) + pow(sphere.c,2) - pow(sphere.d,2);
-  c -= 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c * ray.point.z);
+  b = 2 * (ray.dir.x * (ray.point.x - sphere.a) + ray.dir.y * (ray.point.y - sphere.b) + ray.dir.z * (ray.point.z - sphere.c));
+  c = (pow(ray.point.x - sphere.a, 2) + pow(ray.point.y - sphere.b, 2) + pow(ray.point.z - sphere.c, 2)) - sphere.d;
 
   discriminant = pow(b,2) - 4*a*c;
-
   if(discriminant == 0){
     t1 = -b/(2*a);
     t2 = -b/(2*a);
@@ -296,10 +301,16 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point camera){
     returnedPoint2->y = (ray.point.y + ray.dir.y*t2);
     returnedPoint2->z = (ray.point.z + ray.dir.z*t2);
   }
+  else{
+    return NULL;
+  }
 
-  distance1 = distancePoints(camera, *returnedPoint1);
-  distance2 = distancePoints(camera, *returnedPoint2);
-
+  distance1 = distancePoints(distancePoint, *returnedPoint1);
+  distance2 = distancePoints(distancePoint, *returnedPoint2);
+  printf("%f %f\n",distance1, distance2);
+  printf("%f %f\n",returnedPoint1->x, returnedPoint2->x);
+  printf("%f %f\n",returnedPoint1->y, returnedPoint2->y);
+  printf("%f %f\n\n",returnedPoint1->z, returnedPoint2->z);
   if(distance1 < distance2){
     return returnedPoint1;
   }
@@ -309,7 +320,7 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point camera){
 }
 
 bool comparePoints(point a, point b){
-  if(a.x == b.x && a.y && b.y && a.z == b.z){
+  if((trunc(a.x) == trunc(b.x)) && (trunc(a.y) == trunc(b.y)) && (trunc(a.z) == trunc(b.z))){
     return true;
   }
   return false;
