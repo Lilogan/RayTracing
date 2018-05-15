@@ -14,14 +14,14 @@ typedef struct cartesianPlan_{
   float b;
   float c;
   float d;
-}cartesianPlan;
+} cartesianPlan;
 
 typedef struct vector_ {
   //A= (x,y,z)
   float x;
   float y;
   float z;
-}vector;
+} vector;
 
 typedef struct parametricPlan_{
   vector dir1;
@@ -33,7 +33,7 @@ typedef struct parametricPlan_{
 typedef struct line_{
 	vector dir;
   point point;
-}line;
+} line;
 
 typedef struct halfLine_{
   // min = true => define a minimum
@@ -42,12 +42,23 @@ typedef struct halfLine_{
   point point;
   bool min;
   float param;
-}halfLine;
+} halfLine;
 
 typedef struct polygon_{
   int pointNbre;
   point* vertex;
-}polygon;
+} polygon;
+
+typedef struct surface_{
+  // ax + by + cz + d = 0 avec degrés 
+  float a;
+  float b;
+  float c;
+  float d;
+  int degX
+  int degY
+  int degZ
+} surface;
 
 vector qTimeVector(int k, vector u);//done
 

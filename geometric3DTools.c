@@ -1,6 +1,15 @@
 #include <math.h>
 #include "geometric3DTools.h"
 
+point setCamera(int x, int y, int z){
+  point camera;
+  point.x = x;
+  point.y = y;
+  point.z = z;
+  
+  return point;
+}
+
 vector setVector(point a, point b){
   vector u;
   u.x = b.x - a.x;
