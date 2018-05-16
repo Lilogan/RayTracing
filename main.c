@@ -28,7 +28,7 @@ int main(){
   point* pointIntersect = malloc(sizeof(point));
   point* pointIntersect2 = malloc(sizeof(point));
   point lamp = setPoint(200*5, 0, 200*5);
-  spheroide S = setSpheroide(100*5, -50*5, 100*5, 500*5*5, 2, 2, 2);
+  spheroide S = setSpheroide(pow(100,-2),pow(100,-2),pow(200,-2),0,0,0,0,0,0, 1,100*5, -200, 100*5);
   int y = 0;
 
   for(int i = 0; i<200*5; i++){

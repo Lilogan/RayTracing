@@ -53,13 +53,19 @@ typedef struct polygon_{
 
 typedef struct spheroide_{
   // ax + by + cz + d = 0 avec degrés
-  float a;
-  float b;
-  float c;
-  float d;
-  int degX;
-  int degY;
-  int degZ;
+  float a; // <- x0
+  float b; // <- y0
+  float c; // <- z0
+  float d; // <- a
+  float e; // <- b
+  float f; // <- c
+  float g;
+  float h;
+  float i;
+  float j;
+  float k;
+  float l;
+  float m;
 } spheroide;
 
 point setPoint(int x, int y, int z); //done
@@ -68,7 +74,7 @@ vector setVector(point a, point b); //done
 
 polygon setPolygon(int pointNbr, point* vertex); //done
 
-spheroide setSpheroide(float a, float b, float c, float d, int degX, int degY, int degZ); //done
+spheroide setSpheroide(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j , float k, float l , float m);//done
 
 cartesianPlan setPlanCartesian(vector normal, point randPoint); //done
 
