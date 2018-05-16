@@ -28,7 +28,7 @@ int main(){
   point* pointIntersect = malloc(sizeof(point));
   point* pointIntersect2 = malloc(sizeof(point));
   point lamp = setPoint(200*5, 0, 200*5);
-  spheroide S = setSpheroide(100*5, -50*5, 100*5, 500*5*5, 2, 2, 2);
+  spheroide S = setSpheroide(1,1,1,0,0,0,0,0,0, 500*5*5,100*5, -50*5, 100*5);
   int y = 0;
 
   for(int i = 0; i<200*5; i++){
@@ -38,6 +38,7 @@ int main(){
       pointIntersect  = intersectSpheroideHalfLine(S, hL, camera);
 
       if(pointIntersect != NULL){
+        printf("%f %f %f\n",pointIntersect->x,pointIntersect->y,pointIntersect->z);
         halfLine hL2 = setHalfLine(lamp,*pointIntersect);
         pointIntersect2 = intersectSpheroideHalfLine(S, hL2, lamp);
 

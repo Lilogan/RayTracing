@@ -24,15 +24,22 @@ polygon setPolygon(int pointNbr, point* vertex){
   return poly;
 }
 
-spheroide setSpheroide(float a, float b, float c, float d, int degX, int degY, int degZ){
+spheroide setSpheroide(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j , float k, float l , float m){
   spheroide s;
   s.a = a;
   s.b = b;
   s.c = c;
   s.d = d;
-  s.degX = degX;
-  s.degY = degY;
-  s.degZ = degZ;
+  s.e = e;
+  s.f = f;
+  s.g = g;
+  s.h = h;
+  s.i = i;
+  s.j = j;
+  s.k = k;
+  s.l = l;
+  s.m= m;
+
   return s;
 }
 
@@ -244,7 +251,7 @@ float distancePoints(point a, point b){
   return distance;
 }
 
-point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point distancePoint){
+point* intersectSpheroideHalfLine(spheroide inputSphere, halfLine ray, point distancePoint){
   float discriminant;
   float a;
   float b;
@@ -255,7 +262,7 @@ point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point dista
   float distance2;
   point* returnedPoint1 = malloc(sizeof(point));
   point* returnedPoint2 = malloc(sizeof(point));
-
+  //
   // a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
   // b = 2*(spheroide.a * ray.point.x + spheroide.b * ray.point.y + spheroide.c* ray.point.z);
   // b -= 2*(spheroide.a * ray.dir.x + spheroide.b * ray.dir.y + spheroide.c * ray.dir.z);
@@ -264,15 +271,29 @@ point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point dista
   // c -= 2*(spheroide.a * ray.point.x + spheroide.b * ray.point.y + spheroide.c * ray.point.z);
 
 
-  a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
-  b = 2 * (ray.dir.x * (ray.randPoint.x - spheroide.a) + ray.dir.y * (ray.randPoint.y - spheroide.b) + ray.dir.z * (ray.randPoint.z - spheroide.c));
-  c = (pow(ray.randPoint.x - spheroide.a, 2) + pow(ray.randPoint.y - spheroide.b, 2) + pow(ray.randPoint.z - spheroide.c, 2)) - spheroide.d;
+
+    // a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
+    // b = 2 * (ray.dir.x * (ray.randPoint.x - inputSphere.a) + ray.dir.y * (ray.randPoint.y - inputSphere.b) + ray.dir.z * (ray.randPoint.z - inputSphere.c));
+    // c = (pow(ray.randPoint.x - inputSphere.a, 2) + pow(ray.randPoint.y - inputSphere.b, 2) + pow(ray.randPoint.z - inputSphere.c, 2)) - (inputSphere.d);
+    a = inputSphere.a * pow(ray.dir.x,2) + inputSphere.b * pow(ray.dir.y,2) + inputSphere.c * pow(ray.dir.z,2);
+    a += 2*inputSphere.d* ray.dir.y *ray.dir.z + 2*inputSphere.e * ray.dir.x * ray.dir.z + 2*inputSphere.f * ray.dir.x*ray.dir.y;
+
+    b = 2*inputSphere.a * (ray.randPoint.x-inputSphere.k) * ray.dir.x + 2*inputSphere.b * (ray.randPoint.y-inputSphere.l) * ray.dir.y +  2*inputSphere.c * (ray.randPoint.z-inputSphere.m) * ray.dir.z;
+    b += 2*inputSphere.d*(ray.randPoint.y - inputSphere.l) * ray.dir.z + 2*inputSphere.d*(ray.randPoint.z - inputSphere.m) * ray.dir.y + 2*inputSphere.e*(ray.randPoint.x -inputSphere.k)*ray.dir.z + 2*inputSphere.e*(ray.randPoint.z -inputSphere.m)*ray.dir.x;
+    b += 2*inputSphere.f*(ray.randPoint.x - inputSphere.k)*ray.dir.y +  2*inputSphere.f*(ray.randPoint.y - inputSphere.l)*ray.dir.x + inputSphere.g * ray.dir.x + inputSphere.h * ray.dir.y + inputSphere.i*ray.dir.z;
+
+    c = inputSphere.a*pow(ray.randPoint.x - inputSphere.k,2) + inputSphere.b*pow(ray.randPoint.y - inputSphere.l,2) + inputSphere.c*pow(ray.randPoint.z - inputSphere.m,2) + 2*inputSphere.d*(ray.randPoint.y - inputSphere.l)*(ray.randPoint.z - inputSphere.m);
+    c += 2*inputSphere.e*(ray.randPoint.x - inputSphere.k)*(ray.randPoint.z - inputSphere.m) + 2*inputSphere.f*(ray.randPoint.x - inputSphere.k)*(ray.randPoint.y - inputSphere.l) + inputSphere.g*(ray.randPoint.x - inputSphere.k) + inputSphere.h*(ray.randPoint.y - inputSphere.l);
+    c += inputSphere.i*(ray.randPoint.z - inputSphere.m) + inputSphere.j;
+
+
+
+
+
+  // printf("%f %f %f\n",a,b,c);
 
   discriminant = pow(b,2) - 4*a*c;
-  if(discriminant == 0){
-    t1 = -b/(2*a);
-    t2 = -b/(2*a);
-  } else if(discriminant > 0){
+if(discriminant >= 0){
     t1 = (-b-sqrt(discriminant))/(2*a);
     t2 = (-b+sqrt(discriminant))/(2*a);
   } else{
