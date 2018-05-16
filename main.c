@@ -1,4 +1,3 @@
-#include "bmp.h"
 #include <stdio.h>
 #include "geometric3DTools.h"
 #include <stdlib.h>
@@ -26,7 +25,7 @@ int main(){
 
   point* pointIntersect = malloc(sizeof(point));
   point* pointIntersect2 = malloc(sizeof(point));
-  point lamp = setPoint(500, -250, 2500);
+  point lamp = setPoint(700, -150, 1000);
   ovoide S = setOvoide(500, -250, 500, 5000, 2, 2, 2);
   int y = 0;
 
