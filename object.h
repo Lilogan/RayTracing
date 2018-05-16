@@ -14,8 +14,9 @@ typedef struct listObj_{
   struct listObj_ *next;
 }listObj;
 
+
 object createObject(char *type , void *parameter, color oColor);
-listObj createElt(object elt);
-int addObjToList(listObj *tete, object elt);
 point* intersectHalfLine(object obj, halfLine ray, point pointDistance);
-int deleteList(listObj *tete);
+listObj createElt(object elt);
+int addObjToList(listObj *head, object elt);
+int deleteList(listObj *head);

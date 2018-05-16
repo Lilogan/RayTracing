@@ -30,6 +30,8 @@ point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
   }
 }
 
+
+
 listObj createElt(object elt){
   listObj *list = (listObj*)malloc(sizeof(listObj));
   list->elt = elt;
