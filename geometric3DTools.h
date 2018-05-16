@@ -1,4 +1,6 @@
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 
 typedef struct point_ {
@@ -98,7 +100,7 @@ vector reflect(halfLine i, cartesianPlan p); //done
 
 cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 
-cartesianPlan planOfPolygon(polygon inputPolygon); //done
+cartesianPlan polygonPlan(polygon inputPolygon); //done
 
 bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
 

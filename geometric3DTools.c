@@ -1,6 +1,3 @@
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "geometric3DTools.h"
 
 
@@ -170,7 +167,7 @@ cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint){
   return plan;
 }
 
-cartesianPlan planOfPolygon(polygon inputPolygon){
+cartesianPlan polygonPlan(polygon inputPolygon){
   int vertexNbr;
   vector vectorDir1;
   vector vectorDir2;
@@ -202,7 +199,7 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray){
 
   vertexNbr = inputPolygon.pointNbr;
   symbol = malloc(vertexNbr*sizeof(bool));
-  polygonPlan = planOfPolygon(inputPolygon);
+  polygonPlan = polygonPlan(inputPolygon);
 
   if(polygonPlan.a == 0 && polygonPlan.b == 0 && polygonPlan.c == 0 && polygonPlan.d == 0){
     return false;
