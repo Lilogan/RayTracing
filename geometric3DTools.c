@@ -189,7 +189,7 @@ cartesianPlan polygonPlan(polygon inputPolygon){
 }
 
 bool isRayInpolygon(polygon inputPolygon, halfLine ray){
-  cartesianPlan polygonPlan;
+  cartesianPlan planOfPolygon;
   cartesianPlan normalPlan;
   int vertexNbr;
   point* intersection;
@@ -199,16 +199,16 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray){
 
   vertexNbr = inputPolygon.pointNbr;
   symbol = malloc(vertexNbr*sizeof(bool));
-  polygonPlan = polygonPlan(inputPolygon);
+  planOfPolygon = polygonPlan(inputPolygon);
 
-  if(polygonPlan.a == 0 && polygonPlan.b == 0 && polygonPlan.c == 0 && polygonPlan.d == 0){
+  if(planOfPolygon.a == 0 && planOfPolygon.b == 0 && planOfPolygon.c == 0 && planOfPolygon.d == 0){
     return false;
   }
 
-  intersection = intersectPlanHalfLine(polygonPlan, ray);
-  normalVector.x = polygonPlan.a;
-  normalVector.y = polygonPlan.b;
-  normalVector.z = polygonPlan.c;
+  intersection = intersectPlanHalfLine(planOfPolygon, ray);
+  normalVector.x = planOfPolygon.a;
+  normalVector.y = planOfPolygon.b;
+  normalVector.z = planOfPolygon.c;
   float result;
 
   for(int i = 0; i < vertexNbr; i++){
