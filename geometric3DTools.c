@@ -27,8 +27,8 @@ polygon setPolygon(int pointNbr, point* vertex){
   return poly;
 }
 
-ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ){
-  ovoide s;
+spheroide setSpheroide(float a, float b, float c, float d, int degX, int degY, int degZ){
+  spheroide s;
   s.a = a;
   s.b = b;
   s.c = c;
@@ -247,7 +247,7 @@ float distancePoints(point a, point b){
   return distance;
 }
 
-point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point distancePoint){
+point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point distancePoint){
   float discriminant;
   float a;
   float b;
@@ -260,16 +260,16 @@ point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point distancePoint)
   point* returnedPoint2 = malloc(sizeof(point));
 
   // a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
-  // b = 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c* ray.point.z);
-  // b -= 2*(sphere.a * ray.dir.x + sphere.b * ray.dir.y + sphere.c * ray.dir.z);
+  // b = 2*(spheroide.a * ray.point.x + spheroide.b * ray.point.y + spheroide.c* ray.point.z);
+  // b -= 2*(spheroide.a * ray.dir.x + spheroide.b * ray.dir.y + spheroide.c * ray.dir.z);
   // c = pow(ray.point.x,2) + pow(ray.point.y,2) + pow(ray.point.z,2);
-  // c += pow(sphere.a,2) + pow(sphere.b,2) + pow(sphere.c,2) - pow(sphere.d,2);
-  // c -= 2*(sphere.a * ray.point.x + sphere.b * ray.point.y + sphere.c * ray.point.z);
+  // c += pow(spheroide.a,2) + pow(spheroide.b,2) + pow(spheroide.c,2) - pow(spheroide.d,2);
+  // c -= 2*(spheroide.a * ray.point.x + spheroide.b * ray.point.y + spheroide.c * ray.point.z);
 
 
   a = pow(ray.dir.x,2) + pow(ray.dir.y,2) + pow(ray.dir.z,2);
-  b = 2 * (ray.dir.x * (ray.randPoint.x - sphere.a) + ray.dir.y * (ray.randPoint.y - sphere.b) + ray.dir.z * (ray.randPoint.z - sphere.c));
-  c = (pow(ray.randPoint.x - sphere.a, 2) + pow(ray.randPoint.y - sphere.b, 2) + pow(ray.randPoint.z - sphere.c, 2)) - sphere.d;
+  b = 2 * (ray.dir.x * (ray.randPoint.x - spheroide.a) + ray.dir.y * (ray.randPoint.y - spheroide.b) + ray.dir.z * (ray.randPoint.z - spheroide.c));
+  c = (pow(ray.randPoint.x - spheroide.a, 2) + pow(ray.randPoint.y - spheroide.b, 2) + pow(ray.randPoint.z - spheroide.c, 2)) - spheroide.d;
 
   discriminant = pow(b,2) - 4*a*c;
   if(discriminant == 0){

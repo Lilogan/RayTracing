@@ -13,6 +13,7 @@ int main(){
   color rougeFonce = setColor(100,0,0);
   color noir = setColor(0,0,0);
 
+
   point tabPtsEcran[4];
   tabPtsEcran[0] = setPoint(0, 0, 200*5);
   tabPtsEcran[1] = setPoint(0, 0, 0);
@@ -27,18 +28,18 @@ int main(){
   point* pointIntersect = malloc(sizeof(point));
   point* pointIntersect2 = malloc(sizeof(point));
   point lamp = setPoint(200*5, 0, 200*5);
-  ovoide S = setOvoide(100*5, -50*5, 100*5, 500*5*5, 2, 2, 2);
+  spheroide S = setSpheroide(100*5, -50*5, 100*5, 500*5*5, 2, 2, 2);
   int y = 0;
 
   for(int i = 0; i<200*5; i++){
     for(int j = 0; j<200*5; j++){
       point a = setPoint(i,y,j);
       halfLine hL = setHalfLine(camera, a);
-      pointIntersect  = intersectSphereHalfLine(S, hL, camera);
+      pointIntersect  = intersectSpheroideHalfLine(S, hL, camera);
 
       if(pointIntersect != NULL){
         halfLine hL2 = setHalfLine(lamp,*pointIntersect);
-        pointIntersect2 = intersectSphereHalfLine(S, hL2, lamp);
+        pointIntersect2 = intersectSpheroideHalfLine(S, hL2, lamp);
 
         if(pointIntersect2!=NULL){
           bool compar = comparePoints(*pointIntersect, *pointIntersect2);
@@ -60,7 +61,7 @@ int main(){
         halfLine hL3;
 
         hL3 = setHalfLine(lamp, *pointIntersect3);
-        if(intersectSphereHalfLine(S,hL3, lamp) != NULL){
+        if(intersectSpheroideHalfLine(S,hL3, lamp) != NULL){
           setPixel(I,i,200*5-j ,noir);
         }
         else{

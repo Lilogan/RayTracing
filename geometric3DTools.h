@@ -49,7 +49,7 @@ typedef struct polygon_{
   point* vertex;
 } polygon;
 
-typedef struct ovoide_{
+typedef struct spheroide_{
   // ax + by + cz + d = 0 avec degrés
   float a;
   float b;
@@ -58,7 +58,7 @@ typedef struct ovoide_{
   int degX;
   int degY;
   int degZ;
-} ovoide;
+} spheroide;
 
 point setPoint(int x, int y, int z); //done
 
@@ -66,7 +66,7 @@ vector setVector(point a, point b); //done
 
 polygon setPolygon(int pointNbr, point* vertex); //done
 
-ovoide setOvoide(float a, float b, float c, float d, int degX, int degY, int degZ); //done
+spheroide setSpheroide(float a, float b, float c, float d, int degX, int degY, int degZ); //done
 
 cartesianPlan setPlanCartesian(vector normal, point randPoint); //done
 
@@ -104,6 +104,6 @@ bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
 
 float distancePoints(point a, point b); //done
 
-point* intersectSphereHalfLine(ovoide sphere, halfLine ray, point camera); //done
+point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point pointDistance); //done
 
 bool comparePoints(point a, point b);
