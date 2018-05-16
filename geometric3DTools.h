@@ -1,5 +1,4 @@
 #include <math.h>
-#include "bmp.h"
 #include <stdbool.h>
 
 typedef struct point_ {
