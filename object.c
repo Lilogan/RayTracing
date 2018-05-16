@@ -25,4 +25,7 @@ point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
     intersection = intersectSolidHalfLine(*po,ray);
     return intersection;
   }
+  if(!strcmp(obj.type,"PT")){
+    return NULL;
+  }
 };

@@ -3,7 +3,8 @@
 #include <string.h>
 
 typedef struct object_{
-  char *type;   // spheroid = SP ; plan = PL ; solid = SO
+  char *type;   // spheroid = SP ; plan = PL ; solid = SO ; point : PT
+  void *parameter;
   color oColor;
   // material oMaterial;
 }object;
