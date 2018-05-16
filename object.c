@@ -10,17 +10,17 @@ object createObject(char *type , void *parameter, color oColor){
 
 point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
   point *intersection;
-  if(!strcmp(obj.type,SP)){
+  if(!strcmp(obj.type,"SP")){
      spheroid *sp = (spheroid)obj.parameter;
     intersection = intersectSpheroideHalfLine(*sp,ray,pointDistance);
     return intersection;
   }
-  if(!strcmp(obj.type,PL)){
+  if(!strcmp(obj.type,"PL")){
     parametricPlan *pl = (parametricPlan)obj.parameter;
     intersection = intersectPlanHalfLine(*pl,ray);
     return intersection;
   }
-  if(!strcmp(obj.type,SO)){
+  if(!strcmp(obj.type,"SO")){
     polygon *so = (solid)obj.parameter;
     intersection = intersectSolidHalfLine(*po,ray);
     return intersection;
