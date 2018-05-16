@@ -28,4 +28,39 @@ point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
   if(!strcmp(obj.type,"PT")){
     return NULL;
   }
-};
+}
+
+listObj createElt(object elt){
+  listObj *list = (listObj*)malloc(sizeof(listObj));
+  list->elt = elt;
+  list->next = NULL;
+  return list;
+}
+
+int addObjToList(listObj *head, object elt){
+  if(head != NULL){
+    listObj *currentElt = head;
+    while(currentElt->next != NULL){
+      currentElt = currentElt->next;
+    }
+    currentElt->next = createElt(elt);
+    if(currentElt->next == NULL){
+      return 0;
+    }
+    else{
+      return 1;
+    }
+  }
+  else{
+    return 0;
+  }
+}
+
+int deleteList(listObj *head){
+  if(listObj != NULL){
+    free(head);
+  }
+  else{
+    return -1;
+  }
+}
