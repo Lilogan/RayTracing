@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 int main(){
-  image* I = newImage(200,200);
-  point camera = setPoint(100,100,100);
+  image* I = newImage(1000,1000);
+  point camera = setPoint(500,500,500);
 
   color blanc = setColor(255,255,255);
   color gris = setColor(144,144,144);
@@ -14,10 +14,10 @@ int main(){
   color noir = setColor(0,0,0);
 
   point tabPtsEcran[4];
-  tabPtsEcran[0] = setPoint(0, 0, 200);
+  tabPtsEcran[0] = setPoint(0, 0, 1000);
   tabPtsEcran[1] = setPoint(0, 0, 0);
-  tabPtsEcran[2] = setPoint(200, 0, 0);
-  tabPtsEcran[3] = setPoint(200, 0, 200);
+  tabPtsEcran[2] = setPoint(1000, 0, 0);
+  tabPtsEcran[3] = setPoint(1000, 0, 1000);
 
 
   cartesianPlan sol;
@@ -26,12 +26,12 @@ int main(){
 
   point* pointIntersect = malloc(sizeof(point));
   point* pointIntersect2 = malloc(sizeof(point));
-  point lamp = setPoint(200, 0, 200);
-  ovoide S = setOvoide(100, -50, 100, 500, 2, 2, 2);
+  point lamp = setPoint(500, -250, 2500);
+  ovoide S = setOvoide(500, -250, 500, 5000, 2, 2, 2);
   int y = 0;
 
-  for(int i = 0; i<200; i++){
-    for(int j = 0; j<200; j++){
+  for(int i = 0; i<1000; i++){
+    for(int j = 0; j<1000; j++){
       point a = setPoint(i,y,j);
       halfLine hL = setHalfLine(camera, a);
       pointIntersect  = intersectSphereHalfLine(S, hL, camera);
@@ -42,10 +42,10 @@ int main(){
 
         bool compar = comparePoints(*pointIntersect, *pointIntersect2);
         if(compar){
-          setPixel(I,i,200-j,rougeClair);
+          setPixel(I,i,1000-j,rougeClair);
         }
         else{
-          setPixel(I,i,200-j,rougeFonce);
+          setPixel(I,i,1000-j,rougeFonce);
         }
 
 
@@ -56,15 +56,15 @@ int main(){
 
         hL3 = setHalfLine(lamp, *pointIntersect3);
         if(intersectSphereHalfLine(S,hL3, lamp) != NULL){
-          setPixel(I,i,200-j ,noir);
+          setPixel(I,i,1000-j ,noir);
         }
         else{
-          setPixel(I,i,200-j ,gris);
+          setPixel(I,i,1000-j ,gris);
         }
 
       }
       else{
-        setPixel(I,i,200-j,blanc);
+        setPixel(I,i,1000-j,blanc);
       }
 
     }
