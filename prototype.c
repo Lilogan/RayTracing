@@ -1,14 +1,23 @@
+#define DEFCOLOR setPixel(0,0,0)
+
 color determineColor(*listObj headListObject, *listOBj headListLight, point camera, point currentPixel){
   listObj *currentListObject = headListObject;
   listObj *currentListLight = headListLight;
-  float distanceMin = 99999;
+  float distanceMin = 9999999;
   void *closestObject;
-  color detColor = "colorFond";
+  color detColor = DEFCOLOR;
 
   while(currentListObject != NULL){
-    int distance;
     object currentObject = &(currentListObject->elt);
-    distance = /*calcul distance*/
+    halfLine currentHalfLine = setHalfLine(camera, currentPixel);
+    point* currentIntersect = intersectHalfLine(closestObject, currentHalfLine, camera);
+    float currentDistance;
+
+    if(currentIntersect != NULL){
+      currentDistance = distancePoints(currentPixel, &currentIntersect);
+    }else{
+      currentDistance = 999999;
+    }
 
     if(distanceMin > distance){
       distanceMin = distance;
@@ -19,7 +28,7 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
 
   if(closestObject != NULL){
     halfLine hlCameraPixel = setHalfLine(camera, currentPixel);
-    point *firstIntersect = intersectHalfLine(closestObject, hlCameraPixel, camera)
+    point *firstIntersect = intersectHalfLine(closestObject, hlCameraPixel, camera);
 
     while (currentListLight != NULL) {
       object currentLight = &(currentListLight->elt);
@@ -31,7 +40,7 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
         halfLine hlLampFirstIntersect = setHalfLine(currentLightPoint, &firstIntersect);
         point *secondIntersect = intersectHalfLine(currentObject, hlLampFirstIntersect, lamp);
 
-        if(secondIntersect != NULL){
+        if(secondIntersect == NULL){
           detColor = /*calcul Light*/
         }else{
           detColor = /*ombre*/
@@ -42,8 +51,6 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
       }
       currentListObject = currentListObject->next;
     }
-
-
   }
   return detColor;
 }
