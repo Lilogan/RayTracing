@@ -1,5 +1,5 @@
 #include "geometric3DTools.h"
-
+#include <stdlib.h>
 
 point setPoint(int x, int y, int z){
   point a;
@@ -334,4 +334,42 @@ bool comparePoints(point a, point b){
     return true;
   }
   return false;
+}
+
+point intersectSolidHalfLine(solid *po, halfLine ray, point camera){
+  point *pointsTab = (point*)malloc(sizeof(point));
+  point closestPoint;
+  int *distanceTab = (int*)malloc(sizeof(int));
+  for(int i = 0; i<po->nbPolygon; i++){
+    if(isRayInpolygon(*(po->tabPolygon+i), ray) == true){
+      cartesianPlan plan = polygonPlan(*(po->tabPolygon+i));
+      *(pointsTab + i) = * intersectPlanHalfLine(plan, ray);
+      *(distanceTab + i) = distancePoints(*(pointsTab + i), camera);
+    }
+    else{
+      *(distanceTab + i) = 999999999;
+    }
+  }
+  int distMin = 999999;
+  for(int j = 0; j<po->nbPolygon; j++){
+    if(distMin > *(distanceTab + j)){
+      distMin = *(distanceTab + j);
+    }
+    j++;
+  }
+  int count;
+  for(int k = 0; k<po->nbPolygon; k++){
+    if(distMin == *(distanceTab + k)){
+      count = k;
+    }
+    k++;
+  }
+  int l = 0;
+  while(pointsTab != NULL){
+    if(l == count){
+      closestPoint = *(pointsTab + l);
+    }
+    l++;
+  }
+  return closestPoint;
 }
