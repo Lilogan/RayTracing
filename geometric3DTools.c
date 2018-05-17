@@ -1,5 +1,4 @@
 #include "geometric3DTools.h"
-#include <stdlib.h>
 
 point setPoint(int x, int y, int z){
   point a;
