@@ -51,6 +51,11 @@ typedef struct polygon_{
   point* vertex;
 } polygon;
 
+typedef struct solid_{
+  int nbPolygon;
+  polygon* tabPolygon;
+} solid;
+
 typedef struct spheroide_{
   // ax + by + cz + d = 0 avec degrés
   float a; // <- x0
