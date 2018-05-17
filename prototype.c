@@ -1,5 +1,10 @@
 #define DEFCOLOR setPixel(0,0,0)
 
+color getLight(object light, object obj, vector intersect){
+
+
+}
+
 color determineColor(*listObj headListObject, *listOBj headListLight, point camera, point currentPixel){
   listObj *currentListObject = headListObject;
   listObj *currentListLight = headListLight;
