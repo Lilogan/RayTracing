@@ -4,8 +4,16 @@
 #include <stdlib.h>
 
 int main(){
-  image* I = newImage(200*5  ,200*5);
-  point camera = setPoint(100*5,100*5,100*5);
+  int width = 1000;
+  int height = 1000;
+  int distanceCameraEcran = 500;
+  int distanceSpheroideEcran = -750;
+  int rayonSpheroide = 200;
+
+  image* I = newImage(width, height);
+  point camera = setPoint(width/2, distanceCameraEcran, height/2);
+  point lamp = setPoint(width, 0, height);
+  spheroide S = setSpheroide(width/2, distanceSpheroideEcran, 200, pow(rayonSpheroide, 2), 2, 2, 2);
 
   color blanc = setColor(255,255,255);
   color gris = setColor(144,144,144);
@@ -14,12 +22,9 @@ int main(){
   color noir = setColor(0,0,0);
 
 
-  point tabPtsEcran[4];
-  tabPtsEcran[0] = setPoint(0, 0, 200*5);
+  point tabPtsEcran[2];
+  tabPtsEcran[0] = setPoint(0, 0, height);
   tabPtsEcran[1] = setPoint(0, 0, 0);
-  tabPtsEcran[2] = setPoint(200*5, 0, 0);
-  tabPtsEcran[3] = setPoint(200*5, 0, 200*5);
-
 
   cartesianPlan sol;
   vector dir = setVector(tabPtsEcran[0], tabPtsEcran[1]);
@@ -27,54 +32,43 @@ int main(){
 
   point* pointIntersect = malloc(sizeof(point));
   point* pointIntersect2 = malloc(sizeof(point));
-  point lamp = setPoint(200*5, 0, 200*5);
-  spheroide S = setSpheroide(100*5, -50*5, 100*5, 500*5*5, 2, 2, 2);
-  int y = 0;
 
-  for(int i = 0; i<200*5; i++){
-    for(int j = 0; j<200*5; j++){
-      point a = setPoint(i,y,j);
+  for(int i = 0; i<width; i++){
+    for(int j = 0; j<height; j++){
+      point a = setPoint(i,0,j);
       halfLine hL = setHalfLine(camera, a);
       pointIntersect  = intersectSpheroideHalfLine(S, hL, camera);
 
       if(pointIntersect != NULL){
-        halfLine hL2 = setHalfLine(lamp,*pointIntersect);
+        halfLine hL2 = setHalfLine(lamp, *pointIntersect);
         pointIntersect2 = intersectSpheroideHalfLine(S, hL2, lamp);
 
         if(pointIntersect2!=NULL){
           bool compar = comparePoints(*pointIntersect, *pointIntersect2);
           if(compar){
-            setPixel(I,i,200*5-j,rougeClair);
+            setPixel(I, i, height-j, rougeClair);
           }
           else{
-            setPixel(I,i,200*5-j,rougeFonce);
+            setPixel(I, i, height-j, rougeFonce);
           }
         }
         else{
-          setPixel(I,i,200*5-j,rougeClair);
+          setPixel(I, i, height-j, rougeClair);
         }
-
-
-      }
-      else if(intersectPlanHalfLine(sol, hL) != NULL){
+      } else if(intersectPlanHalfLine(sol, hL) != NULL){
         point* pointIntersect3 = intersectPlanHalfLine(sol, hL);
-        halfLine hL3;
+        halfLine hL3 = setHalfLine(lamp, *pointIntersect3);
 
-        hL3 = setHalfLine(lamp, *pointIntersect3);
-        if(intersectSpheroideHalfLine(S,hL3, lamp) != NULL){
-          setPixel(I,i,200*5-j ,noir);
-        }
-        else{
-          setPixel(I,i,200*5-j ,gris);
+        if(intersectSpheroideHalfLine(S, hL3, lamp) != NULL){
+          setPixel(I, i, height-j, noir);
+        } else{
+          setPixel(I, i, height-j, gris);
         }
 
+      } else{
+        setPixel(I, i, height-j, blanc);
       }
-      else{
-        setPixel(I,i,200*5-j,blanc);
-      }
-
     }
-
   }
 
   save(I, "img.bmp");
