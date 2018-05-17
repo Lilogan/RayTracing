@@ -83,3 +83,64 @@ int save(image* I,const char* fichier)
 	fclose(F);
 	return 0;
 }
+
+color addColor(color first, color second){
+	int red = first.red + second.red;
+	if(red > 255){
+		red = 255;
+	}
+	int green = first.green + second.green;
+	if(green > 255){
+		green = 255;
+	}
+	int blue = first.blue + second.blue;
+	if(blue > 255){
+		blue = 255;
+	}
+	color result = setColor((char)red,(char)green,(char)blue);
+	return result;
+}
+
+color substractColor(color first, color second){
+	int red = first.red - second.red;
+	if(red < 0){
+		red = 0;
+	}
+	int green = first.green - second.green;
+	if(green < 0){
+		green = 0;
+	}
+	int blue = first.blue - second.blue;
+	if(blue < 0){
+		blue = 0;
+	}
+	color result = setColor((char)red,(char)green,(char)blue);
+	return result;
+}
+
+color timesColor(color first, color second){
+	double red = (first.red/255 * second.red/255)*255;
+	double green = (first.green/255 * second.green/255)*255;
+	double blue = (first.blue/255 * second.blue/255)*255;
+	color result = setColor((char)red,(char)green,(char)blue);
+	return result;
+};
+color timesColorNumber(color col, float nb){
+	if (nb < 0){
+		nb = -nb;
+	}
+	double red = first.red + nb;
+	if(red > 255){
+		red = 255;
+	}
+	double green = first.green + nb.green;
+	if(green > 255){
+		green = 255;
+	}
+	double blue = first.blue + nb.blue;
+	if(blue > 255){
+		blue = 255;
+	}
+	color result = setColor((char)red,(char)green,(char)blue);
+	return result;
+};

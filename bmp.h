@@ -40,3 +40,8 @@ void delImage(image*);
 void setPixel(image*,int i,int j,color p);
 color getColor(image*,int i,int j);
 int save(image*,const char* fichier);
+
+color addColor(color first, color second);
+color substractColor(color first, color second);
+color timesColor(color first, color second);
+color timesColorNumber(color col, float nb);

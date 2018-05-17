@@ -372,3 +372,26 @@ point intersectSolidHalfLine(solid *po, halfLine ray, point camera){
   }
   return closestPoint;
 }
+
+vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
+  float x = 2*inputSpheroide.a*normalPoint.x + inputSpheroide.d*normalPoint.y +
+  inputSpheroide.e*normalPoint.z + inputSpheroide.g;
+  float y = 2*inputSpheroide.b*normalPoint.y + inputSpheroide.d*normalPoint.x +
+  inputSpheroide.f*normalPoint.z + inputSpheroide.h;
+  float z = 2*inputSpheroide.c*normalPoint.z + inputSpheroide.e*normalPoint.x +
+  inputSpheroide.f*normalPoint.y + inputSpheroide.i;
+  vector normal = setVector(setPoint(0,0,0),setPoint(x,y,z));
+  return normal;
+}
+
+vector normalizeVector(vector inputVector){
+  float x = inputVector.x/normal(inputVector);
+  float y = inputVector.y/normal(inputVector);
+  float z = inputVector.z/normal(inputVector);
+  vector normalize = setVector(setPoint(0,0,0),setPoint(x,y,z));
+  return normalize;
+}
+
+double cosVector(vertor first, vector second){
+  return scalarVectors(first,second)/(normVector(first)*normVector(second));
+}

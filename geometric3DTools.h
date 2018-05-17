@@ -57,20 +57,20 @@ typedef struct solid_{
 } solid;
 
 typedef struct spheroide_{
-  // ax + by + cz + d = 0 avec degrés
-  float a; // <- x0
-  float b; // <- y0
-  float c; // <- z0
-  float d; // <- a
-  float e; // <- b
-  float f; // <- c
+  // ax² + by² + cz² + dyz + exz + fxy + gx + hy + iz + j = 0 avec degrés
+  float a;
+  float b;
+  float c;
+  float d;
+  float e;
+  float f;
   float g;
   float h;
   float i;
   float j;
-  float k;
-  float l;
-  float m;
+  float k; // <- x0
+  float l; // <- y0
+  float m; // <- z0
 } spheroide;
 
 point setPoint(int x, int y, int z); //done
@@ -120,3 +120,9 @@ float distancePoints(point a, point b); //done
 point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point pointDistance); //done
 
 bool comparePoints(point a, point b);
+
+vector normalSpheroide(spheroide inputSpheroide, point normalPoint);
+
+vector normalizeVector(vector inputVector);
+
+double cosVector(vertor first, vector second);

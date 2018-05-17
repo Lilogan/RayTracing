@@ -1,8 +1,23 @@
-#define DEFCOLOR setPixel(0,0,0)
+#define DEFCOLOR setColor(0,0,0)
+#include "bmp.h"
+#include "object.h"
+#include "geometric3DTools.h"
+#include <math.h>
 
 color getLight(object light, object obj, vector intersect){
-
-
+  vertor normal = normalObject(obj);
+  normal = normalizeVector(normal);
+  intersect = normalizeVector(intersect);
+  double angle = acos(cosVector(normal,intersect));
+  if(angle <= M_PI_2){
+    color oColor = obj.oMaterial.oColor;
+    color lColor = light.oMaterial.oColor;
+    color result = timesColor(oColor,lColor);
+    result = timesColorNumber(result,angle);
+    return result;
+  }else{
+    return setColor(0,0,0);
+  }
 }
 
 color determineColor(*listObj headListObject, *listOBj headListLight, point camera, point currentPixel){
@@ -24,8 +39,8 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
       currentDistance = 999999;
     }
 
-    if(distanceMin > distance){
-      distanceMin = distance;
+    if(distanceMin > currentDistance){
+      distanceMin = currentDistance;
       closestObject = currentObject;
     }
     currentListObject = currentListObject->next;
@@ -42,16 +57,17 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
 
       while(currentListObject != NULL){
         object currentObject = &(currentListObject->elt);
-        halfLine hlLampFirstIntersect = setHalfLine(currentLightPoint, &firstIntersect);
-        point *secondIntersect = intersectHalfLine(currentObject, hlLampFirstIntersect, lamp);
 
-        if(secondIntersect == NULL){
-          detColor = /*calcul Light*/
-        }else{
-          detColor = /*ombre*/
+        if(currentObject != closestObject){
+          halfLine hlLampFirstIntersect = setHalfLine(currentLightPoint, &firstIntersect);
+          point *secondIntersect = intersectHalfLine(currentObject, hlLampFirstIntersect, lamp);
+
+          if(secondIntersect == NULL){
+            detColor = getLight(currentLight,closestObject, hlLampFirstIntersect.dir);
+          }else{
+            detColor = DEFCOLOR;
+          }
         }
-
-
         currentListObject = currentListObject->next;
       }
       currentListObject = currentListObject->next;
