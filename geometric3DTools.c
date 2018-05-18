@@ -194,7 +194,7 @@ cartesianPlan polygonPlan(polygon inputPolygon){
   return polygonPlan;
 }
 
-bool isRayInpolygon(polygon inputPolygon, halfLine ray){
+bool isRayInPolygon(polygon inputPolygon, halfLine ray){
   cartesianPlan planOfPolygon;
   cartesianPlan normalPlan;
   int vertexNbr;
@@ -335,41 +335,30 @@ bool comparePoints(point a, point b){
   return false;
 }
 
-point intersectSolidHalfLine(solid *po, halfLine ray, point camera){
+point intersectSolidHalfLine(solid *so, halfLine ray, point camera){
   point *pointsTab = (point*)malloc(sizeof(point));
   point closestPoint;
-  int *distanceTab = (int*)malloc(sizeof(int));
-  for(int i = 0; i<po->nbPolygon; i++){
-    if(isRayInpolygon(*(po->tabPolygon+i), ray) == true){
-      cartesianPlan plan = polygonPlan(*(po->tabPolygon+i));
-      *(pointsTab + i) = * intersectPlanHalfLine(plan, ray);
+  float *distanceTab = (float*)malloc(sizeof(float));
+  for(int i = 0; i<so->nbPolygon; i++){
+    if(isRayInPolygon(*(so->tabPolygon+i), ray) == true){
+      cartesianPlan plan = polygonPlan(*(so->tabPolygon+i));
+      *(pointsTab + i) = *(intersectPlanHalfLine(plan, ray));
       *(distanceTab + i) = distancePoints(*(pointsTab + i), camera);
     }
     else{
-      *(distanceTab + i) = 999999999;
+      *(distanceTab + i) = MAXFLOAT;
     }
   }
-  int distMin = 999999;
-  for(int j = 0; j<po->nbPolygon; j++){
+  float distMin = MAXFLOAT;
+  int count;
+  for(int j = 0; j<so->nbPolygon; j++){
     if(distMin > *(distanceTab + j)){
       distMin = *(distanceTab + j);
+      count = j;
     }
     j++;
   }
-  int count;
-  for(int k = 0; k<po->nbPolygon; k++){
-    if(distMin == *(distanceTab + k)){
-      count = k;
-    }
-    k++;
-  }
-  int l = 0;
-  while(pointsTab != NULL){
-    if(l == count){
-      closestPoint = *(pointsTab + l);
-    }
-    l++;
-  }
+  closestPoint = *(pointsTab+count);
   return closestPoint;
 }
 

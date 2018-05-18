@@ -113,7 +113,7 @@ cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 
 cartesianPlan polygonPlan(polygon inputPolygon); //done
 
-bool isRayInpolygon(polygon inputPolygon, halfLine ray);//done
+bool isRayInPolygon(polygon inputPolygon, halfLine ray);//done
 
 float distancePoints(point a, point b); //done
 
