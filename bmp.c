@@ -129,15 +129,15 @@ color timesColorNumber(color col, float nb){
 	if (nb < 0){
 		nb = -nb;
 	}
-	double red = first.red + nb;
+	double red = col.red + nb;
 	if(red > 255){
 		red = 255;
 	}
-	double green = first.green + nb.green;
+	double green = col.green + nb;
 	if(green > 255){
 		green = 255;
 	}
-	double blue = first.blue + nb.blue;
+	double blue = col.blue + nb;
 	if(blue > 255){
 		blue = 255;
 	}

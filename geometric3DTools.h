@@ -81,6 +81,8 @@ polygon setPolygon(int pointNbr, point* vertex); //done
 
 spheroide setSpheroide(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j , float k, float l , float m);//done
 
+solid setSolid(int nbPolygon, polygon* tabPolygon);
+
 cartesianPlan setPlanCartesian(vector normal, point randPoint); //done
 
 halfLine setHalfLine(point origin, point randPoint); //done
@@ -119,10 +121,12 @@ float distancePoints(point a, point b); //done
 
 point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point pointDistance); //done
 
+point* intersectSolidHalfLine(solid so, halfLine ray, point camera);
+
 bool comparePoints(point a, point b);
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint);
 
 vector normalizeVector(vector inputVector);
 
-double cosVector(vertor first, vector second);
+double cosVector(vector first, vector second);
