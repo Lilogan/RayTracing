@@ -1,4 +1,5 @@
 #define DEFCOLOR setColor(0,0,0)
+#define OMBERCOLOR setColor(50,50,50)
 #include "bmp.h"
 #include "object.h"
 #include "geometric3DTools.h"
@@ -13,7 +14,7 @@ color getLight(object light, object obj, vector intersect){
     color oColor = obj.oMaterial.oColor;
     color lColor = light.oMaterial.oColor;
     color result = timesColor(oColor,lColor);
-    result = timesColorNumber(result,angle);
+    color result = timesColorNumber(result,angle);
     return result;
   }else{
     return setColor(0,0,0);
@@ -23,7 +24,7 @@ color getLight(object light, object obj, vector intersect){
 color determineColor(*listObj headListObject, *listOBj headListLight, point camera, point currentPixel){
   listObj *currentListObject = headListObject;
   listObj *currentListLight = headListLight;
-  float distanceMin = 9999999;
+  float distanceMin = MAXFLOAT;
   void *closestObject;
   color detColor = DEFCOLOR;
 
@@ -36,7 +37,7 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
     if(currentIntersect != NULL){
       currentDistance = distancePoints(currentPixel, &currentIntersect);
     }else{
-      currentDistance = 999999;
+      currentDistance = MAXFLOAT;
     }
 
     if(distanceMin > currentDistance){
@@ -65,7 +66,7 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
           if(secondIntersect == NULL){
             detColor = getLight(currentLight,closestObject, hlLampFirstIntersect.dir);
           }else{
-            detColor = DEFCOLOR;
+            detColor = OMBERCOLOR;
           }
         }
         currentListObject = currentListObject->next;
