@@ -7,14 +7,15 @@
 int main(){
   int width = 1000;
   int height = 1000;
-  int distanceCameraEcran = -500;
+  int distanceCameraEcran = -200;
   int distanceSpheroideEcran = 750;
   int rayonSpheroide = 200;
+  rayonSpheroide = pow(rayonSpheroide,2);
 
   image* I = newImage(width, height);
   point camera = setPoint(width/2, distanceCameraEcran, height/2);
-  point lamp = setPoint(width, 0, height);
-//  spheroide S = setSpheroide(width/2, distanceSpheroideEcran, 200, pow(rayonSpheroide, 2), 2, 2, 2);
+  point lamp = setPoint(width, 2*distanceCameraEcran, height/2);
+  spheroide S = setSpheroide(1,1,1,0,0,0,0,0,0,rayonSpheroide,width/2,distanceSpheroideEcran,height/2);
 
   point pointA = setPoint(200,600,0);
   point pointB = setPoint(600,600,0);
@@ -29,7 +30,7 @@ int main(){
   polygon polygonC = setPolygon(3,tabPointC);
   polygon polygonD = setPolygon(3,tabPointD);
   polygon tabPolygon[4] = {polygonA,polygonB,polygonC,polygonD};
-  solid theSolid = setSolid(4,tabPolygon);
+  solid theSolid = setSolid(4 ,tabPolygon);
 
 
   color blanc = setColor(255,255,255);
@@ -37,7 +38,7 @@ int main(){
   color rougeClair = setColor(255,0,0);
   color rougeFonce = setColor(100,0,0);
   color noir = setColor(0,0,0);
-
+  color jaune = setColor(255,255,0);
 
   point tabPtsEcran[2];
   tabPtsEcran[0] = setPoint(0, 0, height);
@@ -54,14 +55,17 @@ int main(){
     for(int j = 0; j<height; j++){
       point a = setPoint(i,0,j);
       halfLine hL = setHalfLine(camera, a);
-      pointIntersect  = intersectSolidHalfLine(theSolid, hL, camera);
+
+      pointIntersect = intersectSolidHalfLine(theSolid, hL, camera);
 
       if(pointIntersect != NULL){
         halfLine hL2 = setHalfLine(lamp, *pointIntersect);
         pointIntersect2 = intersectSolidHalfLine(theSolid, hL2, lamp);
-
         if(pointIntersect2!=NULL){
+
           bool compar = comparePoints(*pointIntersect, *pointIntersect2);
+          //printf("%lf %lf %lf\n",pointIntersect->x, pointIntersect->y, pointIntersect->z);
+          //printf("%lf %lf %lf\n\n",pointIntersect2->x, pointIntersect2->y, pointIntersect2->z);
           if(compar){
             setPixel(I, i, height-j, rougeClair);
           }
@@ -85,9 +89,42 @@ int main(){
       } else{
         setPixel(I, i, height-j, blanc);
       }
+
+
+    //pointIntersect  = intersectSpheroideHalfLine(S, hL, camera);
+    //
+    //   if(pointIntersect != NULL){
+    //     halfLine hL2 = setHalfLine(lamp, *pointIntersect);
+    //     pointIntersect2 = intersectSpheroideHalfLine(S, hL2, lamp);
+    //
+    //     if(pointIntersect2!=NULL){
+    //       bool compar = comparePoints(*pointIntersect, *pointIntersect2);
+    //       if(compar){
+    //         setPixel(I, i, height-j, rougeClair);
+    //       }
+    //       else{
+    //         setPixel(I, i, height-j, rougeFonce);
+    //       }
+    //     }
+    //     else{
+    //       setPixel(I, i, height-j, rougeClair);
+    //     }
+    //   } else if(intersectPlanHalfLine(sol, hL) != NULL){
+    //     point* pointIntersect3 = intersectPlanHalfLine(sol, hL);
+    //     halfLine hL3 = setHalfLine(lamp, *pointIntersect3);
+    //
+    //     if(intersectSpheroideHalfLine(S, hL3, lamp) != NULL){
+    //       setPixel(I, i, height-j, noir);
+    //     } else{
+    //       setPixel(I, i, height-j, gris);
+    //     }
+    //
+    //   } else{
+    //     setPixel(I, i, height-j, blanc);
+    //   }
+    //
     }
   }
-
   save(I, "img.bmp");
   delImage(I);
   return 0;

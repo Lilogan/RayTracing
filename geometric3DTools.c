@@ -1,4 +1,8 @@
+#include <stdio.h>
 #include "geometric3DTools.h"
+
+
+#define pi 3.1415923565
 
 point setPoint(int x, int y, int z){
   point a;
@@ -97,7 +101,7 @@ float normVector(vector u){
 }
 
 float scalarVectors(vector u, vector v){
-  return 1 / 2 * (normVector(u) + normVector(v) - normVector(substractVectors(v, u)));
+  return u.x*v.x + u.y*v.y + u.z*v.z;
 }
 
 vector productVector(vector u, vector v){
@@ -110,9 +114,12 @@ vector productVector(vector u, vector v){
 
 float calculParam(cartesianPlan p, halfLine d){
   float calculatedParam;
-  calculatedParam = (-1 * (p.a * d.randPoint.x + p.b * d.randPoint.y + p.c * d.randPoint.x + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
+  if(p.a != 0 && p.b != 0 && p.c != 0){
+    calculatedParam = (-1 * (p.a * d.randPoint.x + p.b * d.randPoint.y + p.c * d.randPoint.x + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
+    return calculatedParam;
+  }
+  return 0;
 
-  return calculatedParam;
 }
 
 point* intersectPlanHalfLine(cartesianPlan p, halfLine d){
@@ -191,6 +198,7 @@ cartesianPlan polygonPlan(polygon inputPolygon){
     vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+1));
     vectorDir2 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+2));
     polygonPlan = definePlan(vectorDir1, vectorDir2, *inputPolygon.vertex);
+
   }
   else{
     polygonPlan.a = 0;
@@ -201,53 +209,37 @@ cartesianPlan polygonPlan(polygon inputPolygon){
   return polygonPlan;
 }
 
-bool isRayInPolygon(polygon inputPolygon, halfLine ray){
-  cartesianPlan planOfPolygon;
-  cartesianPlan normalPlan;
-  int vertexNbr;
-  point* intersection;
-  vector planVector;
-  vector normalVector;
-  bool* symbol;
-
-  vertexNbr = inputPolygon.pointNbr;
-  symbol = malloc(vertexNbr*sizeof(bool));
-  planOfPolygon = polygonPlan(inputPolygon);
-
-  if(planOfPolygon.a == 0 && planOfPolygon.b == 0 && planOfPolygon.c == 0 && planOfPolygon.d == 0){
-    return false;
-  }
-
-  intersection = intersectPlanHalfLine(planOfPolygon, ray);
-  normalVector.x = planOfPolygon.a;
-  normalVector.y = planOfPolygon.b;
-  normalVector.z = planOfPolygon.c;
-  float result;
-
-  for(int i = 0; i < vertexNbr; i++){
-    if(i == vertexNbr-1){
-      planVector = setVector(*(inputPolygon.vertex), *(inputPolygon.vertex+i));
+point* intersectPolygon(polygon inputPolygon, halfLine ray){
+  vector A;
+  vector B;
+  double angle;
+  cartesianPlan planPolygon;
+  point *intersect;
+  int nbrVertex;
+  planPolygon = polygonPlan(inputPolygon);
+  intersect = intersectPlanHalfLine(planPolygon, ray);
+  nbrVertex = inputPolygon.pointNbr;
+  angle = 0;
+  for(int i = 0; i<nbrVertex; i++){
+    if(intersect == NULL){
+      return NULL;
+    }
+    A = setVector(*intersect, inputPolygon.vertex[i]);
+    if(i == nbrVertex-1){
+      B = setVector(*intersect, inputPolygon.vertex[0]);
     }
     else{
-      planVector = setVector(*(inputPolygon.vertex+i), *(inputPolygon.vertex+i+1));
+      B =  setVector(*intersect, inputPolygon.vertex[i+1]);
     }
-    normalPlan = definePlan(planVector, normalVector, *(inputPolygon.vertex+i));
-    result = normalPlan.a*intersection->x + normalPlan.b*intersection->y + normalPlan.c*intersection->z + normalPlan.d;
-    if(result >= 0){
-      *(symbol+i) = true;
-    }
-    else{
-      *(symbol+i) = false;
-    }
+    angle += acos(scalarVectors(A,B)/(normVector(A)*normVector(B)))*180/pi;
   }
-
-  for(int i = 0; i < vertexNbr; i++){
-    if(*(symbol+i) != *(symbol+i+1)){
-      return false;
-    }
+  //printf("%lf\n",angle);
+  if((angle-5) <= 360 && (angle+5)>=360){
+    // printf("touché polygon\n");
+    return intersect;
   }
-
-  return true;;
+  //printf("raté polygon\n");
+  return NULL;
 
 }
 
@@ -336,41 +328,42 @@ if(discriminant >= 0){
 }
 
 bool comparePoints(point a, point b){
-  if(trunc(a.x-b.x)==0 && trunc(a.y-b.y)==0 && trunc(a.z-b.z) == 0){
+  if(trunc(a.x-b.x)==0 && trunc(a.y-b.y)==0 &&trunc (a.z-b.z) == 0){
     return true;
   }
   return false;
 }
 
-point* intersectSolidHalfLine(solid so, halfLine ray, point camera){
-  point **pointsTab = (point**)malloc(sizeof(point));
-  point *closestPoint;
-  float *distanceTab = (float*)malloc(sizeof(float));
-  for(int i = 0; i<so.nbPolygon; i++){
-    if(isRayInPolygon(*(so.tabPolygon+i), ray) == true){
-      cartesianPlan plan = polygonPlan(*(so.tabPolygon+i));
-      *(pointsTab + i) = intersectPlanHalfLine(plan, ray);
-      *(distanceTab + i) = distancePoints(**(pointsTab + i), camera);
+point* intersectSolidHalfLine(solid sol, halfLine ray, point distancePoint){
+  int nbPoly = sol.nbPolygon;
+  float minDistance = -1;
+  point* intersect = malloc(sizeof(point));
+  point* pointV = malloc(sizeof(point));
+  float distV = -1;
+  float distPt = -1;
+
+  for(int i = 0; i<nbPoly; i++){
+    distPt = -1;
+    intersect = intersectPolygon(sol.tabPolygon[i], ray);
+    if(intersect != NULL){
+      distPt = distancePoints(*intersect, distancePoint);
     }
-    else{
-      *(distanceTab + i) = 99999999;
+
+    if(intersect != NULL && distPt > distV){
+      distV = distPt;
+      pointV = intersect;
     }
   }
-  float distMin = 99999999;
-  int count = -1;
-  for(int j = 0; j<so.nbPolygon; j++){
-    if(distMin > *(distanceTab + j)){
-      distMin = *(distanceTab + j);
-      count = j;
-    }
-    j++;
-  }
-  if(count != -1){
-    closestPoint = *(pointsTab+count);
-    return closestPoint;
-  }else{
+
+  if(distV == -1){
+    //printf("raté solid\n");
     return NULL;
   }
+  //printf("touché solid\n");
+  return pointV;
+
+
+
 }
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
