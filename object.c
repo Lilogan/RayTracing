@@ -1,18 +1,43 @@
 #include "object.h"
 
+
 material createMaterial(color oColor, float reflect, float transparency, float refraction){
   material mat;
   mat.oColor = oColor;
-  mat.reflect = reflect
+  mat.reflect = reflect;
   mat.transparency = transparency;
-  mat.refraction = refraction
+  mat.refraction = refraction;
   return mat;
 }
 
-object createObject(char *type , void *parameter, material oMaterial){
+object createObjectSpheroide(spheroide sp, material oMaterial){
   object obj;
-  obj.type = type;
-  obj.parameter = parameter;
+  obj.type = "SP"; //spheroide = SP ; plan = PL ; solid = SO ; point : PT
+  obj.parameter.sp = sp;
+  obj.oMaterial = oMaterial;
+  return obj;
+}
+
+object createObjectPlan(cartesianPlan pl, material oMaterial){
+  object obj;
+  obj.type = "PL";
+  obj.parameter.pl = pl;
+  obj.oMaterial = oMaterial;
+  return obj;
+}
+
+object createObjectSolid(solid so, material oMaterial){
+  object obj;
+  obj.type = "SO";
+  obj.parameter.so = so;
+  obj.oMaterial = oMaterial;
+  return obj;
+}
+
+object createObjectPoint(point pt, material oMaterial){
+  object obj;
+  obj.type = "PT";
+  obj.parameter.pl = pt;
   obj.oMaterial = oMaterial;
   return obj;
 }
@@ -20,17 +45,17 @@ object createObject(char *type , void *parameter, material oMaterial){
 point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
   point *intersection;
   if(!strcmp(obj.type,"SP")){
-     spheroide *sp = (spheroide)obj.parameter;
-    intersection = intersectSpheroideHalfLine(*sp,ray,pointDistance);
+     spheroide sp = obj.parameter.sp;
+    intersection = intersectSpheroideHalfLine(sp,ray,pointDistance);
     return intersection;
   }
   if(!strcmp(obj.type,"PL")){
-    parametricPlan *pl = (parametricPlan)obj.parameter;
-    intersection = intersectPlanHalfLine(*pl,ray);
+    parametricPlan pl = obj.parameter.pl;
+    intersection = intersectPlanHalfLine(pl,ray);
     return intersection;
   }
   if(!strcmp(obj.type,"SO")){
-    polygon *so = (solid)obj.parameter;
+    polygon so = obj.parameter.so;
     intersection = intersectSolidHalfLine(*po,ray);
     return intersection;
   }
@@ -42,18 +67,18 @@ point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
 vector normalObject(object obj, point normalPoint){
   vector normal;
   if(!strcmp(obj.type,"SP")){
-     spheroide *sp = (spheroide)obj.parameter;
+     spheroide sp = obj.parameter.sp;
     normal = normalSpheroide(*sp,normalPoint);
     return normal;
   }
   if(!strcmp(obj.type,"PL")){
-     parametricPlan *pl = (parametricPlan)obj.parameter;
-    normal = normalPlan(*pl,normalPoint);
+     parametricPlan pl = obj.parameter.pl;
+    normal = normalPlan(pl,normalPoint);
     return normal;
   }
   if(!strcmp(obj.type,"SO")){
-     solid *so = (solid)obj.parameter;
-    normal = normalSolid(*so,normalPoint);
+     solid *so = (solid)obj.parameter.so;
+    normal = normalSolid(so,normalPoint);
     return normal;
   }
   if(!strcmp(obj.type,"PT")){

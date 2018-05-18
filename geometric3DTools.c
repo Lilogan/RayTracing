@@ -23,6 +23,13 @@ polygon setPolygon(int pointNbr, point* vertex){
   return poly;
 }
 
+solid setSolid(int nbPolygon , polygon* tabPolygon){
+  solid sol;
+  sol.nbPolygon = nbPolygon;
+  sol.tabPolygon = tabPolygon;
+  return sol;
+}
+
 spheroide setSpheroide(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j , float k, float l , float m){
   spheroide s;
   s.a = a;
@@ -335,31 +342,35 @@ bool comparePoints(point a, point b){
   return false;
 }
 
-point intersectSolidHalfLine(solid *so, halfLine ray, point camera){
-  point *pointsTab = (point*)malloc(sizeof(point));
-  point closestPoint;
+point* intersectSolidHalfLine(solid so, halfLine ray, point camera){
+  point **pointsTab = (point**)malloc(sizeof(point));
+  point *closestPoint;
   float *distanceTab = (float*)malloc(sizeof(float));
-  for(int i = 0; i<so->nbPolygon; i++){
-    if(isRayInPolygon(*(so->tabPolygon+i), ray) == true){
-      cartesianPlan plan = polygonPlan(*(so->tabPolygon+i));
-      *(pointsTab + i) = *(intersectPlanHalfLine(plan, ray));
-      *(distanceTab + i) = distancePoints(*(pointsTab + i), camera);
+  for(int i = 0; i<so.nbPolygon; i++){
+    if(isRayInPolygon(*(so.tabPolygon+i), ray) == true){
+      cartesianPlan plan = polygonPlan(*(so.tabPolygon+i));
+      *(pointsTab + i) = intersectPlanHalfLine(plan, ray);
+      *(distanceTab + i) = distancePoints(**(pointsTab + i), camera);
     }
     else{
-      *(distanceTab + i) = MAXFLOAT;
+      *(distanceTab + i) = 99999999;
     }
   }
-  float distMin = MAXFLOAT;
-  int count;
-  for(int j = 0; j<so->nbPolygon; j++){
+  float distMin = 99999999;
+  int count = -1;
+  for(int j = 0; j<so.nbPolygon; j++){
     if(distMin > *(distanceTab + j)){
       distMin = *(distanceTab + j);
       count = j;
     }
     j++;
   }
-  closestPoint = *(pointsTab+count);
-  return closestPoint;
+  if(count != -1){
+    closestPoint = *(pointsTab+count);
+    return closestPoint;
+  }else{
+    return NULL;
+  }
 }
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
@@ -374,13 +385,13 @@ vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
 }
 
 vector normalizeVector(vector inputVector){
-  float x = inputVector.x/normal(inputVector);
-  float y = inputVector.y/normal(inputVector);
-  float z = inputVector.z/normal(inputVector);
+  float x = inputVector.x/normVector(inputVector);
+  float y = inputVector.y/normVector(inputVector);
+  float z = inputVector.z/normVector(inputVector);
   vector normalize = setVector(setPoint(0,0,0),setPoint(x,y,z));
   return normalize;
 }
 
-double cosVector(vertor first, vector second){
+double cosVector(vector first, vector second){
   return scalarVectors(first,second)/(normVector(first)*normVector(second));
 }

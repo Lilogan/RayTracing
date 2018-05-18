@@ -2,6 +2,13 @@
 #include "bmp.h"
 #include <string.h>
 
+typedef union surface_{
+  spheroide sp;
+  plan pl;
+  solid so;
+  point pt;
+}surface;
+
 typedef struct material_{
   color oColor;
   float reflect;
@@ -11,7 +18,7 @@ typedef struct material_{
 
 typedef struct object_{
   char *type;   // spheroide = SP ; plan = PL ; solid = SO ; point : PT
-  void *parameter;
+  surface parameter;
   material oMaterial;
 }object;
 
