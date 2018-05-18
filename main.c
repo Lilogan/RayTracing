@@ -1,3 +1,4 @@
+#include <math.h>
 #include "bmp.h"
 #include <stdio.h>
 #include "geometric3DTools.h"
@@ -6,14 +7,30 @@
 int main(){
   int width = 1000;
   int height = 1000;
-  int distanceCameraEcran = 500;
-  int distanceSpheroideEcran = -750;
+  int distanceCameraEcran = -500;
+  int distanceSpheroideEcran = 750;
   int rayonSpheroide = 200;
 
   image* I = newImage(width, height);
   point camera = setPoint(width/2, distanceCameraEcran, height/2);
   point lamp = setPoint(width, 0, height);
-  spheroide S = setSpheroide(width/2, distanceSpheroideEcran, 200, pow(rayonSpheroide, 2), 2, 2, 2);
+//  spheroide S = setSpheroide(width/2, distanceSpheroideEcran, 200, pow(rayonSpheroide, 2), 2, 2, 2);
+
+  point pointA = setPoint(200,600,0);
+  point pointB = setPoint(600,600,0);
+  point pointC = setPoint(400,491,329);
+  point pointD = setPoint(400,254,0);
+  point tabPointA[3] = {pointA,pointB,pointC};
+  point tabPointB[3] = {pointD,pointB,pointC};
+  point tabPointC[3] = {pointA,pointD,pointC};
+  point tabPointD[3] = {pointA,pointB,pointD};
+  polygon polygonA = setPolygon(3,tabPointA);
+  polygon polygonB = setPolygon(3,tabPointB);
+  polygon polygonC = setPolygon(3,tabPointC);
+  polygon polygonD = setPolygon(3,tabPointD);
+  polygon tabPolygon[4] = {polygonA,polygonB,polygonC,polygonD};
+  solid theSolid = setSolid(4,tabPolygon);
+
 
   color blanc = setColor(255,255,255);
   color gris = setColor(144,144,144);
@@ -37,11 +54,11 @@ int main(){
     for(int j = 0; j<height; j++){
       point a = setPoint(i,0,j);
       halfLine hL = setHalfLine(camera, a);
-      pointIntersect  = intersectSpheroideHalfLine(S, hL, camera);
+      pointIntersect  = intersectSolidHalfLine(theSolid, hL, camera);
 
       if(pointIntersect != NULL){
         halfLine hL2 = setHalfLine(lamp, *pointIntersect);
-        pointIntersect2 = intersectSpheroideHalfLine(S, hL2, lamp);
+        pointIntersect2 = intersectSolidHalfLine(theSolid, hL2, lamp);
 
         if(pointIntersect2!=NULL){
           bool compar = comparePoints(*pointIntersect, *pointIntersect2);
@@ -59,7 +76,7 @@ int main(){
         point* pointIntersect3 = intersectPlanHalfLine(sol, hL);
         halfLine hL3 = setHalfLine(lamp, *pointIntersect3);
 
-        if(intersectSpheroideHalfLine(S, hL3, lamp) != NULL){
+        if(intersectSolidHalfLine(theSolid, hL3, lamp) != NULL){
           setPixel(I, i, height-j, noir);
         } else{
           setPixel(I, i, height-j, gris);
