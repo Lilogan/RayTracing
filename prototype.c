@@ -1,9 +1,7 @@
 #define DEFCOLOR setColor(0,0,0)
 #define OMBERCOLOR setColor(50,50,50)
-#include "bmp.h"
-#include "object.h"
-#include "geometric3DTools.h"
-#include <math.h>
+
+
 
 color getLight(object light, object obj, vector intersect){
   vertor normal = normalObject(obj);
@@ -64,7 +62,8 @@ color determineColor(*listObj headListObject, *listOBj headListLight, point came
           point *secondIntersect = intersectHalfLine(currentObject, hlLampFirstIntersect, lamp);
 
           if(secondIntersect == NULL){
-            detColor = getLight(currentLight,closestObject, hlLampFirstIntersect.dir);
+            color calc = getLight(currentLight,closestObject, hlLampFirstIntersect.dir);
+            detColor = addColor(detColor,calc);
           }else{
             detColor = OMBERCOLOR;
           }

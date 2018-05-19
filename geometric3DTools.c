@@ -1,3 +1,8 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
+
 #include "geometric3DTools.h"
 
 point setPoint(int x, int y, int z){
@@ -97,7 +102,7 @@ float normVector(vector u){
 }
 
 float scalarVectors(vector u, vector v){
-  return 1 / 2 * (normVector(u) + normVector(v) - normVector(substractVectors(v, u)));
+  return u.x*v.x+u.y*v.y+u.z*v.z;
 }
 
 vector productVector(vector u, vector v){

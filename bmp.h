@@ -34,6 +34,8 @@ struct bmpFileHead{
 	struct bmpImageHead bih;
 };
 
+#pragma pack(8)
+
 color setColor(unsigned char red, unsigned char green, unsigned char blue);
 image* newImage(int width,int height);
 void delImage(image*);

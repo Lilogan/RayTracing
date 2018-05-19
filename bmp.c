@@ -119,28 +119,36 @@ color substractColor(color first, color second){
 }
 
 color timesColor(color first, color second){
-	double red = (first.red/255 * second.red/255)*255;
-	double green = (first.green/255 * second.green/255)*255;
-	double blue = (first.blue/255 * second.blue/255)*255;
+	double redA = first.red;
+	double redB = second.red;
+	double greenA = first.green;
+	double greenB = second.green;
+	double blueA = first.blue;
+	double blueB = second.blue;
+
+	double red = (redA/255 * redB/255)*255;
+	double green = (greenA/255 * greenB/255)*255;
+	double blue = (blueA/255 * blueB/255)*255;
 	color result = setColor((char)red,(char)green,(char)blue);
 	return result;
-};
+}
+
 color timesColorNumber(color col, float nb){
 	if (nb < 0){
 		nb = -nb;
 	}
-	double red = col.red + nb;
+	double red = col.red * nb;
 	if(red > 255){
 		red = 255;
 	}
-	double green = col.green + nb;
+	double green = col.green * nb;
 	if(green > 255){
 		green = 255;
 	}
-	double blue = col.blue + nb;
+	double blue = col.blue * nb;
 	if(blue > 255){
 		blue = 255;
 	}
 	color result = setColor((char)red,(char)green,(char)blue);
 	return result;
-};
+}
