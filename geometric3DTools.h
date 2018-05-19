@@ -112,13 +112,15 @@ cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 
 cartesianPlan polygonPlan(polygon inputPolygon); //done
 
-bool isRayInPolygon(polygon inputPolygon, halfLine ray);//done
+float distancePoints(point a, point b);
+
+point* intersectPolygon(polygon inputPolygon, halfLine ray);//done
 
 float distancePoints(point a, point b); //done
 
 point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point pointDistance); //done
 
-point* intersectSolidHalfLine(solid so, halfLine ray, point camera);
+point* intersectSolidHalfLine(solid so, halfLine ray, point distancePoint);
 
 bool comparePoints(point a, point b);
 
