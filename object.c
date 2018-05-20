@@ -10,6 +10,7 @@ int id = 0;
 int addId(){
   int send = id;
   id++;
+  printf("id : %d\n",send);
   return send;
 }
 
@@ -88,12 +89,12 @@ vector normalObject(object obj, point normalPoint){
     normal = normalSpheroide(sp,normalPoint);
     return normal;
   }
-  /*if(!strcmp(obj.type,"PL")){
-     parametricPlan pl = obj.parameter.pl;
-    normal = normalPlan(pl,normalPoint);
+  if(!strcmp(obj.type,"PL")){
+     cartesianPlan pl = obj.parameter.pl;
+    normal = normalPlan(pl);
     return normal;
   }
-  if(!strcmp(obj.type,"SO")){
+  /*if(!strcmp(obj.type,"SO")){
      solid *so = (solid)obj.parameter.so;
     normal = normalSolid(so,normalPoint);
     return normal;
@@ -135,6 +136,7 @@ int addObjToList(listObj *head, object elt){
 int deleteList(listObj *head){
   if(head != NULL){
     free(head);
+    return 0;
   }
   else{
     return -1;

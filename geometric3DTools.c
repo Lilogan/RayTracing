@@ -118,7 +118,7 @@ vector productVector(vector u, vector v){
 
 float calculParam(cartesianPlan p, halfLine d){
   float calculatedParam;
-  if(p.a != 0 && p.b != 0 && p.c != 0){
+  if(p.a != 0 || p.b != 0 || p.c != 0){
     calculatedParam = (-1 * (p.a * d.randPoint.x + p.b * d.randPoint.y + p.c * d.randPoint.x + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
     return calculatedParam;
   }
@@ -149,7 +149,7 @@ point* intersectPlanHalfLine(cartesianPlan p, halfLine d){
 
 }
 
-vector normal(cartesianPlan p){
+vector normalPlan(cartesianPlan p){
   vector normal;
   normal.x = p.a;
   normal.y = p.b;
@@ -165,7 +165,7 @@ vector reflect(halfLine i, cartesianPlan p){
   float normalNorm;
   incident = i.dir;
   incidentNorm = pow(normVector(incident),-1);
-  normalVec = normal(p);
+  normalVec = normalPlan(p);
   normalNorm = pow(normVector(normalVec),-1);
 
   float cosinus = scalarVectors(qTimeVector(normalNorm,normalVec), qTimeVector(-1*incidentNorm,incident));
@@ -340,7 +340,6 @@ bool comparePoints(point a, point b){
 
 point* intersectSolidHalfLine(solid sol, halfLine ray, point distancePoint){
   int nbPoly = sol.nbPolygon;
-  float minDistance = -1;
   point* intersect = malloc(sizeof(point));
   point* pointV = malloc(sizeof(point));
   float distV = -1;
@@ -371,13 +370,14 @@ point* intersectSolidHalfLine(solid sol, halfLine ray, point distancePoint){
 }
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
-  float x = 2*inputSpheroide.a*normalPoint.x + inputSpheroide.d*normalPoint.y +
-  inputSpheroide.e*normalPoint.z + inputSpheroide.g;
-  float y = 2*inputSpheroide.b*normalPoint.y + inputSpheroide.d*normalPoint.x +
-  inputSpheroide.f*normalPoint.z + inputSpheroide.h;
-  float z = 2*inputSpheroide.c*normalPoint.z + inputSpheroide.e*normalPoint.x +
-  inputSpheroide.f*normalPoint.y + inputSpheroide.i;
-  vector normal = setVector(setPoint(0,0,0),setPoint(x,y,z));
+  float x = 2*inputSpheroide.a*normalPoint.x + inputSpheroide.e*normalPoint.z +
+  inputSpheroide.f*normalPoint.y + inputSpheroide.g;
+  float y = 2*inputSpheroide.b*normalPoint.y + inputSpheroide.d*normalPoint.z +
+  inputSpheroide.f*normalPoint.x + inputSpheroide.h;
+  float z = 2*inputSpheroide.c*normalPoint.z + inputSpheroide.d*normalPoint.y +
+  inputSpheroide.e*normalPoint.x + inputSpheroide.i;
+  vector normal = setVector(setPoint(inputSpheroide.k,inputSpheroide.l,inputSpheroide.m),setPoint(x,y,z));
+
   return normal;
 }
 
