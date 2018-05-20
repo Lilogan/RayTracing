@@ -7,22 +7,22 @@
 
 #define MAXFLOAT 99999999999
 #define DEFCOLOR setColor(0,0,0)
-#define OMBERCOLOR setColor(0,255,0)
 
 
 
 color getLight(object light, object obj, vector intersect, point intersectPoint){
+  intersect = qTimeVector(-1,intersect);
   vector normal = normalObject(obj,intersectPoint);
-  double angle = acos(cosVector(normal,intersect));
-  if(1/*angle <= M_PI_2*/){
-    color oColor = obj.oMaterial.oColor;
-    color lColor = light.oMaterial.oColor;
-    color result = timesColor(oColor,lColor);
-    //result = timesColorNumber(result,angle);
-    return result;
-  }else{
-    return OMBERCOLOR;
+  double angle = cosVector(normal,intersect);
+  color fColor = DEFCOLOR;
+  color oColor = obj.oMaterial.oColor;
+  color lColor = light.oMaterial.oColor;
+  color aColor = timesColor(oColor,lColor);
+  if(angle > 0){
+    fColor = timesColorNumber(aColor,angle);
   }
+  //color result = addColor(fColor,timesColorNumber(aColor,0.2));
+  return fColor;
 }
 
 color determineColor(listObj* headListObject, listObj* headListLight, point camera, point currentPixel){
@@ -53,7 +53,6 @@ color determineColor(listObj* headListObject, listObj* headListLight, point came
     }
     currentListObject = currentListObject->next;
   }
-
   if(closestObject != NULL){
     while (currentListLight != NULL) {
       bool lampIsClosest = true;
@@ -97,8 +96,8 @@ int main() {
   int width = 1000;
   int height = 1000;
   int distanceCameraEcran = -500;
-  int distanceSpheroideEcran = 750;
-  int rayonSpheroide = 200;
+  int distanceSpheroideEcran = 600;
+  int rayonSpheroide = 300;
 
   image* I = newImage(width, height);
   point camera = setPoint(width/2, distanceCameraEcran, height/2);
@@ -126,13 +125,12 @@ int main() {
   object oSol = createObjectPlan(sol, matSol);
 
 
-  listObj *listLamp = createElt(oLamp);
-  addObjToList(listLamp,oLamp2);
+  listObj *listLamp = createElt(oLamp2);
+  addObjToList(listLamp,oLamp);
   listObj *objects = createElt(oSp);
-  addObjToList(objects,oSp2);
+  //addObjToList(objects,oSp2);
   addObjToList(objects,oSol);
 
-  color a = timesColor(oSol.oMaterial.oColor,oLamp.oMaterial.oColor);
 
   for(int i = 0; i<width; i++){
     for(int j = 0; j<height; j++){

@@ -100,7 +100,7 @@ float calculParam(cartesianPlan p, halfLine d); //done
 
 point* intersectPlanHalfLine(cartesianPlan p, halfLine d); // done
 
-vector normal(cartesianPlan p);//done
+vector normalPlan(cartesianPlan p);//done
 
 // vector refracte(halfLine i, cartesianPlan p);
 
