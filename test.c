@@ -5,7 +5,7 @@
 #include "geometric3DTools.h"
 #include "object.h"
 
-#define MAXFLOAT 99999999999
+#define MAXFLOAT 9999999999999
 #define DEFCOLOR setColor(0,0,0)
 
 
@@ -65,15 +65,16 @@ color determineColor(listObj* headListObject, listObj* headListLight, point came
 
       while(currentListObject != NULL && lampIsClosest){
         object currentObject = currentListObject->elt;
-        int distanceFirstIntersectLamp = (int)distancePoints(currentLightPoint, *firstIntersect);
+        float distanceFirstIntersectLamp = distancePoints(currentLightPoint, *firstIntersect);
         point *secondIntersect = intersectHalfLine(currentObject, hlLampFirstIntersect, currentLightPoint);
-        int distanceSecondIntersectLamp = -1;
+        float distanceSecondIntersectLamp = -1;
 
         if(secondIntersect != NULL && closestObject->id != currentObject.id){
-          distanceSecondIntersectLamp = (int)distancePoints(currentLightPoint, *secondIntersect);
+          distanceSecondIntersectLamp = distancePoints(currentLightPoint, *secondIntersect);
         }
 
         if(distanceSecondIntersectLamp < distanceFirstIntersectLamp && distanceSecondIntersectLamp != -1){
+          printf("%lf - %lf\n", distanceFirstIntersectLamp, distanceSecondIntersectLamp);
           lampIsClosest = false;
         }
         currentListObject = currentListObject->next;
@@ -102,9 +103,9 @@ int main() {
   image* I = newImage(width, height);
   point camera = setPoint(width/2, distanceCameraEcran, height/2);
   spheroide sp = setSpheroide(1, 1, 1, 0, 0, 0, 0, 0, 0, pow(rayonSpheroide, 2), width/4,  distanceSpheroideEcran, rayonSpheroide);
-  spheroide sp2 = setSpheroide(1, 1, 1, 0, 0, 0, 0, 0, 0, pow(rayonSpheroide, 2), 3*width/4,  distanceSpheroideEcran, rayonSpheroide);
-  point lamp = setPoint(width, 2, height);
-  point lamp2 = setPoint(0,2,height);
+  spheroide sp2 = setSpheroide(1, 1, 1, 0, 0, 0, 0, 0, 0, pow(rayonSpheroide-100, 2), 3*width/4,  distanceSpheroideEcran+200, rayonSpheroide);
+  point lamp = setPoint(1000, -2 , 1000);
+  //point lamp2 = setPoint(0,2,height);
 
 
   cartesianPlan sol;
@@ -113,22 +114,23 @@ int main() {
   sol.c = 1;
   sol.d = 0;
 
-  material matLamp = createMaterial(setColor(255,0,0),0,0,0);
-  material matLamp2 = createMaterial(setColor(0,0,255),0,0,0);
-  material matSp = createMaterial(setColor(255,255,255),0,0,0);
+  material matLamp = createMaterial(setColor(255,255,255),0,0,0);
+  //material matLamp2 = createMaterial(setColor(255,0,0),0,0,0);
+  material matSp = createMaterial(setColor(0,0,255),0,0,0);
+  material matSp2 = createMaterial(setColor(255,0,0),0,0,0);
   material matSol = createMaterial(setColor(144,144,144),0,0,0);
 
   object oSp = createObjectSpheroide(sp,matSp);
-  object oSp2 = createObjectSpheroide(sp2,matSp);
+  object oSp2 = createObjectSpheroide(sp2,matSp2);
   object oLamp = createObjectPoint(lamp,matLamp);
-  object oLamp2 = createObjectPoint(lamp2,matLamp2);
-  object oSol = createObjectPlan(sol, matSol);
+//  object oLamp2 = createObjectPoint(lamp2,matLamp2);
+  object oSol = createObjectPlan(sol,matSol);
 
 
-  listObj *listLamp = createElt(oLamp2);
-  addObjToList(listLamp,oLamp);
+  listObj *listLamp = createElt(oLamp);
+  //addObjToList(listLamp,oLamp2);
   listObj *objects = createElt(oSp);
-  //addObjToList(objects,oSp2);
+  addObjToList(objects,oSp2);
   addObjToList(objects,oSol);
 
 

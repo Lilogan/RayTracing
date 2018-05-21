@@ -116,8 +116,6 @@ float distancePoints(point a, point b);
 
 point* intersectPolygon(polygon inputPolygon, halfLine ray);//done
 
-float distancePoints(point a, point b); //done
-
 point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point pointDistance); //done
 
 point* intersectSolidHalfLine(solid so, halfLine ray, point distancePoint);
