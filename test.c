@@ -74,7 +74,7 @@ color determineColor(listObj* headListObject, listObj* headListLight, point came
         }
 
         if(distanceSecondIntersectLamp < distanceFirstIntersectLamp && distanceSecondIntersectLamp != -1){
-          printf("%lf - %lf\n", distanceFirstIntersectLamp, distanceSecondIntersectLamp);
+          printf("%lf - %lf | %f-%f-%f\n", distanceFirstIntersectLamp, distanceSecondIntersectLamp, secondIntersect->x, secondIntersect->y, secondIntersect->z);
           lampIsClosest = false;
         }
         currentListObject = currentListObject->next;
@@ -103,8 +103,8 @@ int main() {
   image* I = newImage(width, height);
   point camera = setPoint(width/2, distanceCameraEcran, height/2);
   spheroide sp = setSpheroide(1, 1, 1, 0, 0, 0, 0, 0, 0, pow(rayonSpheroide, 2), width/4,  distanceSpheroideEcran, rayonSpheroide);
-  spheroide sp2 = setSpheroide(1, 1, 1, 0, 0, 0, 0, 0, 0, pow(rayonSpheroide-100, 2), 3*width/4,  distanceSpheroideEcran+200, rayonSpheroide);
-  point lamp = setPoint(1000, -2 , 1000);
+  spheroide sp2 = setSpheroide(1, 1, 1, 0, 0, 0, 0, 0, 0, pow(rayonSpheroide+100, 2), 3*width/4+100,  distanceSpheroideEcran+300, rayonSpheroide+100);
+  point lamp = setPoint(2, -2 , 2000);
   //point lamp2 = setPoint(0,2,height);
 
 

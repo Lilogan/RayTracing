@@ -52,7 +52,7 @@ spheroide setSpheroide(float a, float b, float c, float d, float e, float f, flo
   s.j = j;
   s.k = k;
   s.l = l;
-  s.m= m;
+  s.m = m;
 
   return s;
 }
@@ -119,7 +119,7 @@ vector productVector(vector u, vector v){
 float calculParam(cartesianPlan p, halfLine d){
   float calculatedParam;
   if(p.a != 0 || p.b != 0 || p.c != 0){
-    calculatedParam = (-1 * (p.a * d.randPoint.x + p.b * d.randPoint.y + p.c * d.randPoint.x + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
+    calculatedParam = (-1 * (p.a * d.randPoint.x + p.b * d.randPoint.y + p.c * d.randPoint.z + p.d)) / (p.a * d.dir.x + p.b * d.dir.y + p.c * d.dir.z);
     return calculatedParam;
   }
   return 0;
