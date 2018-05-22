@@ -10,7 +10,7 @@ int id = 0;
 int addId(){
   int send = id;
   id++;
-  printf("id : %d\n",send);
+  //printf("id : %d\n",send);
   return send;
 }
 
@@ -71,14 +71,14 @@ point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
     intersection = intersectPlanHalfLine(pl,ray);
     return intersection;
   }
-  /*if(!strcmp(obj.type,"SO")){
-    polygon so = obj.parameter.so;
-    intersection = intersectSolidHalfLine(*po,ray);
+  if(!strcmp(obj.type,"SO")){
+    solid so = obj.parameter.so;
+    intersection = intersectSolidHalfLine(so,ray, pointDistance);
     return intersection;
   }
   if(!strcmp(obj.type,"PT")){
     return NULL;
-  }*/
+  }
   return NULL;
 }
 
@@ -94,14 +94,14 @@ vector normalObject(object obj, point normalPoint){
     normal = normalPlan(pl);
     return normal;
   }
-  /*if(!strcmp(obj.type,"SO")){
-     solid *so = (solid)obj.parameter.so;
+  if(!strcmp(obj.type,"SO")){
+     solid so = obj.parameter.so;
     normal = normalSolid(so,normalPoint);
     return normal;
   }
   if(!strcmp(obj.type,"PT")){
     return setVector(setPoint(0,0,0),setPoint(0,0,0));
-  }*/
+  }
   return setVector(setPoint(0,0,0),setPoint(0,0,0));
 }
 

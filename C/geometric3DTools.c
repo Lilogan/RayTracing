@@ -235,7 +235,7 @@ point* intersectPolygon(polygon inputPolygon, halfLine ray){
     else{
       B =  setVector(*intersect, inputPolygon.vertex[i+1]);
     }
-    angle += acos(scalarVectors(A,B)/(normVector(A)*normVector(B)))*180/pi;
+    angle += acos(cosVector(A,B))*180/pi;
   }
   //printf("%lf\n",angle);
   if((angle-5) <= 360 && (angle+5)>=360){
@@ -249,7 +249,9 @@ point* intersectPolygon(polygon inputPolygon, halfLine ray){
 
 float distancePoints(point a, point b){
   float distance;
+
   distance = sqrt(pow(b.x-a.x,2) + pow(b.y-a.y,2) + pow(b.z-a.z,2));
+
   return distance;
 }
 

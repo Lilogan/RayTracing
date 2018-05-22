@@ -1,0 +1,116 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+}
+body{
+    height: 100vh;
+    width: 100vw;
+}
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 10vh;
+    display: flex;
+    border-bottom: solid black 1px;
+}
+.formHeader{
+    display: flex;
+    flex-direction: column;
+}
+.formHeader select{
+    
+    text-align: center;
+    margin-bottom: 5px;
+}
+#centerHeader{
+    font-size: 20px;
+    text-decoration: underline;
+    font-weight: 500;
+}
+#content{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+#left{
+    height: 93vh;
+    width: 25%;
+    border-right: solid black 1px;
+}
+#right{
+    height: auto;
+    widows: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+#addElement{
+    height: 60vh;
+    overflow-y: scroll;
+    padding-left: 13px;
+    border-bottom: solid black 1px;
+}
+#allElements{
+    margin-left: 15px;
+    height: 30vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#elementTitle{
+    margin-top: 10px;
+    font-size: 18px;
+    text-decoration: underline;
+}
+.elementDesc{
+    margin-top: 5px;
+    font-style: italic;
+}
+#formParameters{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 15px;
+}
+.inputParameter input[type="number"]{
+    width: 120px;
+    height: 20px;
+}
+.inputParameter input[type="text"]{
+    width: 120px;
+    height: 20px;
+}
+.inputParameter input[type="submit"]{
+    width: 110px;
+    height: 24px;
+    margin-top: 15px;
+}
+.inputParameter label{
+    display: inline-block;
+    width: 120px;
+}
+.allElementTitle{
+    margin-top: 25px;
+    margin-left: 10px;
+    text-decoration: underline;
+
+}
+.anElement{
+    margin-left: 30px;
+}
+.inputParameters select{
+    text-align: center;
+    width: 120px;
+    height: 25px;
+}
+img{
+  height: 75%;
+  width: 75%;
+}
