@@ -29,6 +29,7 @@
         <select name="scenePicker">
           <option>Scènes faites</option>
           <option>Scène 1</option>
+          <option>Scène 2</option>
         </select>
         <input type="submit" name="showScene" value="Voir"/>
       </form>
@@ -61,7 +62,7 @@
              else{
                  echo "cacahuete";
              }
-            
+
             ?>
         </div>
     </div>

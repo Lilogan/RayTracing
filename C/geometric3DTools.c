@@ -129,13 +129,13 @@ float calculParam(cartesianPlan p, halfLine d){
 point* intersectPlanHalfLine(cartesianPlan p, halfLine d){
   float calculatedParam = calculParam(p, d);
   point* returnedPoint = malloc(sizeof(point));
-
-  if(d.min == true && d.param <= calculatedParam){
+  //printf("%f \n",calculatedParam);
+  if(d.min == true && d.param < calculatedParam){
     returnedPoint->x = d.randPoint.x + d.dir.x*calculatedParam;
     returnedPoint->y = d.randPoint.y + d.dir.y*calculatedParam;
     returnedPoint->z = d.randPoint.z + d.dir.z*calculatedParam;
     return returnedPoint;
-  } else if(d.min == false && d.param >= calculatedParam){
+  } else if(d.min == false && d.param > calculatedParam){
     returnedPoint->x = d.randPoint.x + d.dir.x*calculatedParam;
     returnedPoint->y = d.randPoint.y + d.dir.y*calculatedParam;
     returnedPoint->z = d.randPoint.z + d.dir.z*calculatedParam;
@@ -149,15 +149,18 @@ point* intersectPlanHalfLine(cartesianPlan p, halfLine d){
 
 }
 
-vector normalPlan(cartesianPlan p){
+vector normalPlan(cartesianPlan p, vector incident){
   vector normal;
   normal.x = p.a;
   normal.y = p.b;
   normal.z = p.c;
+  if(scalarVectors(normal, incident) < 0){
+    normal = qTimeVector(-1,normal);
+  }
   return normal;
 }
 
-vector reflect(halfLine i, cartesianPlan p){
+vector reflectPlan(halfLine i, cartesianPlan p){
   vector incident;
   vector reflected;
   vector normalVec;
@@ -165,20 +168,21 @@ vector reflect(halfLine i, cartesianPlan p){
   float normalNorm;
   incident = i.dir;
   incidentNorm = pow(normVector(incident),-1);
-  normalVec = normalPlan(p);
+  normalVec = normalPlan(p, incident);
   normalNorm = pow(normVector(normalVec),-1);
 
-  float cosinus = scalarVectors(qTimeVector(normalNorm,normalVec), qTimeVector(-1*incidentNorm,incident));
+  float cosinus = cosVector(incident, normalVec);
 
   if(cosinus >= -1 && cosinus <= 1){
-    reflected = addVectors(qTimeVector(incidentNorm, incident), qTimeVector(2*cosinus,qTimeVector(normalNorm, normalVec)));
+    reflected = addVectors(normalizeVector(incident), qTimeVector(2*cosinus,normalizeVector(normalVec)));
+    //printf("%f %f %f\n",reflected.x, reflected.y, reflected.z);
   }
   else{
     reflected.x = 0;
     reflected.y = 0;
     reflected.z = 0;
   }
-
+  //printf("%f %f %f\n",reflected.x, reflected.y, reflected.z);
   return reflected;
 }
 
@@ -293,7 +297,7 @@ point* intersectSpheroideHalfLine(spheroide inputSphere, halfLine ray, point dis
 
 
   discriminant = pow(b,2) - 4*a*c;
-if(discriminant >= 0){
+  if(discriminant >= 0){
     t1 = (-b-sqrt(discriminant))/(2*a);
     t2 = (-b+sqrt(discriminant))/(2*a);
   } else{
@@ -372,12 +376,15 @@ point* intersectSolidHalfLine(solid sol, halfLine ray, point distancePoint){
 }
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
-  float x = 2*inputSpheroide.a*normalPoint.x + inputSpheroide.e*normalPoint.z +
+  /*float x = 2*inputSpheroide.a*normalPoint.x + inputSpheroide.e*normalPoint.z +
   inputSpheroide.f*normalPoint.y + inputSpheroide.g;
   float y = 2*inputSpheroide.b*normalPoint.y + inputSpheroide.d*normalPoint.z +
   inputSpheroide.f*normalPoint.x + inputSpheroide.h;
   float z = 2*inputSpheroide.c*normalPoint.z + inputSpheroide.d*normalPoint.y +
-  inputSpheroide.e*normalPoint.x + inputSpheroide.i;
+  inputSpheroide.e*normalPoint.x + inputSpheroide.i;*/
+  float x = normalPoint.x;
+  float y = normalPoint.y;
+  float z = normalPoint.z;
   vector normal = setVector(setPoint(inputSpheroide.k,inputSpheroide.l,inputSpheroide.m),setPoint(x,y,z));
 
   return normal;
@@ -393,4 +400,12 @@ vector normalizeVector(vector inputVector){
 
 double cosVector(vector first, vector second){
   return scalarVectors(first,second)/(normVector(first)*normVector(second));
+}
+
+point translate(point pt, vector vec){
+  point returned;
+  returned.x = pt.x + vec.x;
+  returned.y = pt.y + vec.y;
+  returned.z = pt.z + vec.z;
+  return returned;
 }

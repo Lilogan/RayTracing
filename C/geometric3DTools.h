@@ -100,13 +100,13 @@ float calculParam(cartesianPlan p, halfLine d); //done
 
 point* intersectPlanHalfLine(cartesianPlan p, halfLine d); // done
 
-vector normalPlan(cartesianPlan p);//done
+vector normalPlan(cartesianPlan p, vector incident);//done
 
 // vector refracte(halfLine i, cartesianPlan p);
 
 // cartesianPlan firstPlanIntersect(line line);
 
-vector reflect(halfLine i, cartesianPlan p); //done
+vector reflectPlan(halfLine i, cartesianPlan p); //done
 
 cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint); //done
 
@@ -127,3 +127,5 @@ vector normalSpheroide(spheroide inputSpheroide, point normalPoint);
 vector normalizeVector(vector inputVector);
 
 double cosVector(vector first, vector second);
+
+point translate(point pt, vector vec);

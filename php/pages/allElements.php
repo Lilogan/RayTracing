@@ -1,6 +1,7 @@
 <p id="elementTitle">Elements ajoutés</p>
 
 <?php
+//var_dump($_SESSION["allElements"]);
 foreach($_SESSION["allElements"] as $current){
     if($current[0] == "SP"){
         

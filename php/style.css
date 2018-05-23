@@ -21,7 +21,7 @@ header{
     flex-direction: column;
 }
 .formHeader select{
-    
+
     text-align: center;
     margin-bottom: 5px;
 }
@@ -112,5 +112,4 @@ header{
 }
 img{
   height: 75%;
-  width: 75%;
 }

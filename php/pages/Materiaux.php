@@ -20,6 +20,10 @@
         <input type="number" id="B" name='B' step="1"/>
     </div>
     <div class="inputParameter">
+        <label for="Reflexion">Réflexion:</label>   
+        <input type="number" id="Reflexion" name='Reflexion' step="0.1" min="0" max="100"/>
+    </div>
+    <div class="inputParameter">
         <label for="Transparance">Transparance:</label>   
         <input type="number" id="Transparance" name='Transparance' step="0.1" min="0" max="100"/>
     </div>
@@ -27,10 +31,7 @@
         <label for="Refraction">Réfraction:</label>   
         <input type="number" id="Refraction" name='Refraction' step="0.1"/>
     </div>
-    <div class="inputParameter">
-        <label for="Reflexion">Réflexion:</label>   
-        <input type="number" id="Reflexion" name='Reflexion' step="0.1" min="0" max="100"/>
-    </div>
+    
     <div class="inputParameter">
         <input type="submit"  name="addMateriaux" value="Ajouter"/>
     </div>

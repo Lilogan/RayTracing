@@ -10,10 +10,9 @@
 
 
 
-color getLight(object light, object obj, vector intersect, point intersectPoint){
-  intersect = qTimeVector(-1,intersect);
-  vector normal = normalObject(obj,intersectPoint);
-  double angle = cosVector(normal,intersect);
+color getLight(object light, object obj, halfLine intersect, point intersectPoint){
+  vector normal = normalObject(obj,intersectPoint, intersect);
+  double angle = cosVector(normal,intersect.dir);
   color fColor = DEFCOLOR;
   color oColor = obj.oMaterial.oColor;
   color lColor = light.oMaterial.oColor;
@@ -26,41 +25,78 @@ color getLight(object light, object obj, vector intersect, point intersectPoint)
 }
 
 color determineColor(listObj* headListObject, listObj* headListLight, point camera, point currentPixel){
+
   listObj *currentListObject = headListObject;
   listObj *currentListLight = headListLight;
-  float distanceMin = MAXFLOAT;
-  object *closestObject = NULL;
+  float distanceMin = -1;
+  object* closestObject = NULL;
+  point point1 = camera;
+  point point2 = currentPixel;
   color detColor = DEFCOLOR;
+  bool isReflected = true;
+  halfLine currentHalfLine;
+  point* currentIntersect;
+  int previousClosestObjectId = -1;
 
-  while(currentListObject != NULL){
-    object currentObject = currentListObject->elt;
-    halfLine currentHalfLine = setHalfLine(camera, currentPixel);
-    point* currentIntersect = intersectHalfLine(currentObject, currentHalfLine, camera);
-    float currentDistance;
 
-    if(currentIntersect != NULL){
-      if(closestObject == NULL){
-        closestObject = malloc(sizeof(object));
+  printf("1\n");
+  while(isReflected == true){
+    if(closestObject != NULL){
+      free(closestObject);
+      closestObject = NULL;
+    }
+    currentHalfLine = setHalfLine(point1, point2);
+    isReflected = false;
+    while(currentListObject != NULL){
+      object currentObject = currentListObject->elt;
+      currentIntersect = intersectHalfLine(currentObject, currentHalfLine, point1);
+      float currentDistance;
+      if(currentIntersect != NULL){
+        if(closestObject == NULL){
+          closestObject = (object*)malloc(sizeof(object));
+        }
+        currentDistance = distancePoints(point2, *currentIntersect);
+      }else{
+        currentDistance = -1;
       }
-      currentDistance = distancePoints(currentPixel, *currentIntersect);
-    }else{
-      currentDistance = MAXFLOAT;
+
+      if((distanceMin > currentDistance && currentDistance != -1) || (distanceMin == -1 && currentDistance != -1)){
+        printf("2\n");
+        distanceMin = currentDistance;
+        *closestObject = currentObject;
+
+      }
+      currentListObject = currentListObject->next;
     }
 
-    if(distanceMin > currentDistance){
-      distanceMin = currentDistance;
-      *closestObject = currentObject;
-    }
-    currentListObject = currentListObject->next;
+  /*  if(closestObject != NULL){
+      if(closestObject->oMaterial.reflect != 0 && (closestObject->id != previousClosestObjectId || previousClosestObjectId == -1)){
+        previousClosestObjectId = closestObject->id;
+        vector refractedVector = reflectObject(*closestObject, currentHalfLine);
+        printf("%f %f %f\n",refractedVector.x,refractedVector.y, refractedVector.z);
+        if(refractedVector.x != 0 || refractedVector.y !=0 || refractedVector.z != 0){
+          isReflected = true;
+          point2 = translate(*currentIntersect, refractedVector);
+          printf("%f %f %f\n", point2.x, point2.y, point2.z);
+          point1 = *currentIntersect;
+          printf("%f %f %f\n", point1.x, point1.y, point1.z);
+        }
+      }
+    }*/
+
   }
+
+
   if(closestObject != NULL){
     while (currentListLight != NULL) {
       bool lampIsClosest = true;
+      currentHalfLine = setHalfLine(point1, point2);
       object currentLight = currentListLight->elt;
       point currentLightPoint = currentLight.parameter.pt;
-      halfLine hlCameraPixel = setHalfLine(camera,currentPixel);
-      point *firstIntersect = intersectHalfLine(*closestObject, hlCameraPixel, camera);
-      halfLine hlLampFirstIntersect = setHalfLine(currentLightPoint, *firstIntersect);
+      halfLine hlCameraPixel = setHalfLine(point1,point2);
+      point *firstIntersect = intersectHalfLine(*closestObject, hlCameraPixel, point1);
+      //printf("%p\n%p\n\n",firstIntersect, &currentLightPoint);
+      halfLine hlLampFirstIntersect = setHalfLine(*firstIntersect,currentLightPoint);
       currentListObject = headListObject;
 
       while(currentListObject != NULL && lampIsClosest){
@@ -81,13 +117,13 @@ color determineColor(listObj* headListObject, listObj* headListLight, point came
       }
 
       if(lampIsClosest){
-        color calc =  getLight(currentLight,*closestObject,hlLampFirstIntersect.dir,*firstIntersect);
+        color calc =  getLight(currentLight,*closestObject,hlLampFirstIntersect,*firstIntersect);
         detColor = addColor(detColor,calc);
       }
       currentListLight = currentListLight->next;
     }
+    free(closestObject);
   }
-  free(closestObject);
   return detColor;
 }
 
@@ -105,10 +141,12 @@ int main() {
 
   listObj *listLamp = NULL;
   listObj *objects = NULL;
-
   FILE* file = fopen("../allInfos","r");
+  fseek(file, 0, 0);
   char curInfo[7];
-  while(fgets(curInfo,7,file) != NULL){
+
+
+  while(fgets(curInfo,7,file)){
     if(strncmp(curInfo, "LAMPE",5) == 0){
       point lampePos;
       material lampeMat;
@@ -169,7 +207,7 @@ int main() {
       plan.d = atof(curInfo);
 
 
-      //set lampe colorPixel
+      //set plan colorPixel
       fgets(curInfo,7,file);
       red= atoi(curInfo);
       fgets(curInfo,7,file);
@@ -177,13 +215,13 @@ int main() {
       fgets(curInfo,7,file);
       blue= atoi(curInfo);
       fgets(curInfo,7,file);
-      transparency= atof(curInfo);
+      reflection= atof(curInfo);
       fgets(curInfo,7,file);
-      reflection = atof(curInfo);
+      transparency = atof(curInfo);
       fgets(curInfo,7,file);
       refraction= atof(curInfo);
 
-      //set lampe material
+      //set plan material
       planMat = createMaterial(setColor(red,green,blue),reflection,transparency,refraction);
 
       //set lampeMat
@@ -216,11 +254,12 @@ int main() {
 
       //set lampe position
       fgets(curInfo,7,file);
-      rayonA = pow(atof(curInfo),-2);
+      rayonA = atof(curInfo);
       fgets(curInfo,7,file);
-      rayonB = pow(atof(curInfo),-2);
+      rayonB = pow(rayonA/atof(curInfo),2);
       fgets(curInfo,7,file);
-      rayonC = pow(atof(curInfo),-2);
+      rayonC = pow(rayonA/atof(curInfo),2);
+
       fgets(curInfo,7,file);
       centreX = atof(curInfo);
       fgets(curInfo,7,file);
@@ -237,15 +276,15 @@ int main() {
       fgets(curInfo,7,file);
       blue= atoi(curInfo);
       fgets(curInfo,7,file);
-      transparency= atof(curInfo);
+      reflection= atof(curInfo);
       fgets(curInfo,7,file);
-      reflection = atof(curInfo);
+      transparency = atof(curInfo);
       fgets(curInfo,7,file);
       refraction= atof(curInfo);
 
 
       //set rayonSpheroide
-      sp = setSpheroide(rayonA,rayonB,rayonC,0,0,0,0,0,0,1,centreX,centreY,centreZ);
+      sp = setSpheroide(1,rayonB,rayonC,0,0,0,0,0,0,pow(rayonA,2),centreX,centreY,centreZ);
 
       //set lampe material
       spMat = createMaterial(setColor(red,green,blue),reflection,transparency,refraction);
@@ -260,74 +299,74 @@ int main() {
         addObjToList(objects, newSp);
       }
     }
-    else if(strncmp(curInfo, "SO", 2)){
-      int nbrFace = atoi(fgets(curInfo,7,file));
-      int nbSommets;
-      float x;
-      float y;
-      float z;
-
-      int red;
-      int green;
-      int blue;
-      float reflection;
-      float transparency;
-      float refraction;
-
-      solid so;
-      material soMat;
-      object newSo;
-
-      so.nbPolygon = nbrFace;
-      polygon tabPolygon[nbrFace];
-
-      for(int i = 0; i < nbrFace; i++){
-        int nbrSommet;
-        nbrSommet = atoi(fgets(curInfo,7,file));
-        polygon poly;
-        poly.pointNbr = nbrSommet;
-        point sommets[nbrSommet];
-        for(int j = 0; j<nbrSommet*3;j++){
-          fgets(curInfo, 7, file);
-          x = atof(curInfo);
-          fgets(curInfo, 7, file);
-          y = atof(curInfo);
-          fgets(curInfo, 7, file);
-          z = atof(curInfo);
-          sommets[j] = setPoint(x,y,z);
-        }
-        poly.vertex = sommets;
-        tabPolygon[i] = poly;
-      }
-      so.tabPolygon = tabPolygon;
-
-      fgets(curInfo,7,file);
-      red= atoi(curInfo);
-      fgets(curInfo,7,file);
-      green= atoi(curInfo);
-      fgets(curInfo,7,file);
-      blue= atoi(curInfo);
-      fgets(curInfo,7,file);
-      transparency= atof(curInfo);
-      fgets(curInfo,7,file);
-      reflection = atof(curInfo);
-      fgets(curInfo,7,file);
-      refraction= atof(curInfo);
-
-      //set lampe material
-      soMat = createMaterial(setColor(red,green,blue),reflection,transparency,refraction);
-
-      //set lampeMat
-      newSo = createObjectSolid(so, soMat);
-
-      //save the lampeMat
-      if(objects == NULL){
-        objects = createElt(newSo);
-      }else{
-        addObjToList(objects, newSo);
-      }
-
-    }
+    // else if(strncmp(curInfo, "SO", 2)){
+    //   int nbrFace = atoi(fgets(curInfo,7,file));
+    //   int nbSommets;
+    //   float x;
+    //   float y;
+    //   float z;
+    //
+    //   int red;
+    //   int green;
+    //   int blue;
+    //   float reflection;
+    //   float transparency;
+    //   float refraction;
+    //
+    //   solid so;
+    //   material soMat;
+    //   object newSo;
+    //
+    //   so.nbPolygon = nbrFace;
+    //   polygon tabPolygon[nbrFace];
+    //
+    //   for(int i = 0; i < nbrFace; i++){
+    //     int nbrSommet;
+    //     nbrSommet = atoi(fgets(curInfo,7,file));
+    //     polygon poly;
+    //     poly.pointNbr = nbrSommet;
+    //     point sommets[nbrSommet];
+    //     for(int j = 0; j<nbrSommet*3;j++){
+    //       fgets(curInfo, 7, file);
+    //       x = atof(curInfo);
+    //       fgets(curInfo, 7, file);
+    //       y = atof(curInfo);
+    //       fgets(curInfo, 7, file);
+    //       z = atof(curInfo);
+    //       sommets[j] = setPoint(x,y,z);
+    //     }
+    //     poly.vertex = sommets;
+    //     tabPolygon[i] = poly;
+    //   }
+    //   so.tabPolygon = tabPolygon;
+    //
+    //   fgets(curInfo,7,file);
+    //   red= atoi(curInfo);
+    //   fgets(curInfo,7,file);
+    //   green= atoi(curInfo);
+    //   fgets(curInfo,7,file);
+    //   blue= atoi(curInfo);
+    //   fgets(curInfo,7,file);
+    //   transparency= atof(curInfo);
+    //   fgets(curInfo,7,file);
+    //   reflection = atof(curInfo);
+    //   fgets(curInfo,7,file);
+    //   refraction= atof(curInfo);
+    //
+    //   //set lampe material
+    //   soMat = createMaterial(setColor(red,green,blue),reflection,transparency,refraction);
+    //
+    //   //set lampeMat
+    //   newSo = createObjectSolid(so, soMat);
+    //
+    //   //save the lampeMat
+    //   if(objects == NULL){
+    //     objects = createElt(newSo);
+    //   }else{
+    //     addObjToList(objects, newSo);
+    //   }
+    //
+    // }
   }
   for(int i = 0; i<width; i++){
     for(int j = 0; j<height; j++){

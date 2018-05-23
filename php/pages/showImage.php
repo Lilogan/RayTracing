@@ -190,5 +190,3 @@ $img = ImageCreateFromBmp("./php/test2.bmp");
 imagejpeg($img, "test.jpg");
 
 echo "<img src='".$_SESSION["shownScene"]."' alt='Impossible d\'afficher l\'image'/>";
-
-

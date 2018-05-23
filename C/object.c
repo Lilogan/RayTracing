@@ -70,19 +70,17 @@ point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
     cartesianPlan pl = obj.parameter.pl;
     intersection = intersectPlanHalfLine(pl,ray);
     return intersection;
+    printf("interse plan\n");
   }
-  if(!strcmp(obj.type,"SO")){
+  /*if(!strcmp(obj.type,"SO")){
     solid so = obj.parameter.so;
     intersection = intersectSolidHalfLine(so,ray, pointDistance);
     return intersection;
-  }
-  if(!strcmp(obj.type,"PT")){
-    return NULL;
-  }
+  }*/
   return NULL;
 }
 
-vector normalObject(object obj, point normalPoint){
+vector normalObject(object obj, point normalPoint, halfLine incident){
   vector normal;
   if(!strcmp(obj.type,"SP")){
      spheroide sp = obj.parameter.sp;
@@ -91,20 +89,26 @@ vector normalObject(object obj, point normalPoint){
   }
   if(!strcmp(obj.type,"PL")){
      cartesianPlan pl = obj.parameter.pl;
-    normal = normalPlan(pl);
+    normal = normalPlan(pl, incident.dir);
     return normal;
   }
-  if(!strcmp(obj.type,"SO")){
+  /*if(!strcmp(obj.type,"SO")){
      solid so = obj.parameter.so;
     normal = normalSolid(so,normalPoint);
     return normal;
-  }
-  if(!strcmp(obj.type,"PT")){
-    return setVector(setPoint(0,0,0),setPoint(0,0,0));
-  }
+  }*/
   return setVector(setPoint(0,0,0),setPoint(0,0,0));
 }
 
+
+vector reflectObject(object obj, halfLine ray){
+  vector returned;
+  if(strcmp(obj.type, "PL") == 0){
+    returned = reflectPlan(ray, obj.parameter.pl);
+    return returned;
+  }
+  return setVector(setPoint(0,0,0),setPoint(0,0,0));
+}
 
 
 listObj *createElt(object elt){

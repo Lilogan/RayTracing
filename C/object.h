@@ -33,7 +33,8 @@ object createObjectPlan(cartesianPlan pl, material oMaterial);
 object createObjectSolid(solid so, material oMaterial);
 object createObjectPoint(point pt, material oMaterial);
 point* intersectHalfLine(object obj, halfLine ray, point pointDistance);
-vector normalObject(object obj, point normalPoint);
+vector normalObject(object obj, point normalPoint, halfLine incident);
+vector reflectObject(object obj, halfLine ray);
 
 listObj *createElt(object elt);
 int addObjToList(listObj *head, object elt);

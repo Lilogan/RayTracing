@@ -178,15 +178,17 @@ if(filter_input(INPUT_POST, "setSolide", FILTER_SANITIZE_SPECIAL_CHARS)){
 
 if(filter_input(INPUT_POST, "execute", FILTER_SANITIZE_SPECIAL_CHARS)){
     $_SESSION["shownScene"] = "test.jpg";
-    $fichier = fopen("../allInfos","w");
+    //unlink("../allInfos");
     $j = 0;
+    $string = NULL;
+    $fichier = fopen("../allInfos","w");
+    fseek($fichier, 0);
     foreach($_SESSION["allElements"] as $current){
-        $string = NULL;
         if($current[0] == "SP"){
             $string = $current[0]."\n".$current[1]."\n".$current[2]."\n".$current[3]."\n".$current[4]."\n".$current[5]."\n".$current[6];
             foreach($_SESSION["allMateriaux"] as $mat){
                 if($mat[1] == $current[7]){
-                    $string = $string."\n".$mat[2]."\n".$mat[3]."\n".$mat[4]."\n".$mat[5]."\n".$mat[6]."\n".$mat[7]."\n".$mat[8];
+                    $string = $string."\n".$mat[2]."\n".$mat[3]."\n".$mat[4]."\n".$mat[5]."\n".$mat[6]."\n".$mat[7];
                 }
             }
         }
@@ -204,7 +206,7 @@ if(filter_input(INPUT_POST, "execute", FILTER_SANITIZE_SPECIAL_CHARS)){
             $string = $current[0]."\n".$current[1]."\n".$current[2]."\n".$current[3]."\n".$current[4];
             foreach($_SESSION["allMateriaux"] as $mat){
                 if($mat[1] == $current[5]){
-                    $string = $string."\n".$mat[2]."\n".$mat[3]."\n".$mat[4]."\n".$mat[5]."\n".$mat[6]."\n".$mat[7]."\n".$mat[8];
+                    $string = $string."\n".$mat[2]."\n".$mat[3]."\n".$mat[4]."\n".$mat[5]."\n".$mat[6]."\n".$mat[7];
                 }
             }
             
@@ -220,20 +222,23 @@ if(filter_input(INPUT_POST, "execute", FILTER_SANITIZE_SPECIAL_CHARS)){
             }
             foreach($_SESSION["allMateriaux"] as $mat){
                 if($mat[1] == $current[$current[1]+2]){
-                    $string = $string."\n".$mat[2]."\n".$mat[3]."\n".$mat[4]."\n".$mat[5]."\n".$mat[6]."\n".$mat[7]."\n";
+                    $string = $string."\n".$mat[2]."\n".$mat[3]."\n".$mat[4]."\n".$mat[5]."\n".$mat[6]."\n".$mat[7];
                 }
             }
 
         }
-        if($j != 0){
-            $string = "\n".$string;
+        
+        if($j == 0){
+            var_dump($string);
+            fprintf($fichier, "%s",$string);
         }
-        fwrite($fichier, $string);
+        else{
+            fprintf($fichier, "\r\n%s",$string);
+        }
         $j++;
+        
     }
-    
-
-     fclose($fichier);
+    fclose($fichier);
     
     shell_exec(" gcc ../C/test.c ../C/geometric3DTools.c ../C/object.c ../C/bmp.c -lm");
     shell_exec("./a.out");
@@ -250,11 +255,10 @@ if(filter_input(INPUT_POST, "addMateriaux", FILTER_SANITIZE_SPECIAL_CHARS)){
     $rouge = filter_input(INPUT_POST, "R", FILTER_SANITIZE_SPECIAL_CHARS);
     $vert = filter_input(INPUT_POST, "V", FILTER_SANITIZE_SPECIAL_CHARS);
     $bleu = filter_input(INPUT_POST, "B", FILTER_SANITIZE_SPECIAL_CHARS);
-    $transparance = filter_input(INPUT_POST, "Transparance", FILTER_SANITIZE_SPECIAL_CHARS);
     $reflexion = filter_input(INPUT_POST, "Reflexion", FILTER_SANITIZE_SPECIAL_CHARS);
+    $transparance = filter_input(INPUT_POST, "Transparance", FILTER_SANITIZE_SPECIAL_CHARS); 
     $refraction = filter_input(INPUT_POST, "Refraction", FILTER_SANITIZE_SPECIAL_CHARS);
 
-    echo "test";
     if($nom!=NULL && $rouge!=NULL && $vert!=NULL && $bleu!=NULL && $transparance!=NULL && $reflexion!=NULL && $refraction!=NULL && !in_array($nom, $_SESSION["materiauxName"])){
         $newMaterial = array();
         array_push($newMaterial, "MAT");
@@ -262,8 +266,8 @@ if(filter_input(INPUT_POST, "addMateriaux", FILTER_SANITIZE_SPECIAL_CHARS)){
         array_push($newMaterial, $rouge);
         array_push($newMaterial, $vert);
         array_push($newMaterial, $bleu);
-        array_push($newMaterial, $transparance);
         array_push($newMaterial, $reflexion);
+        array_push($newMaterial, $transparance);
         array_push($newMaterial, $refraction);
         array_push($_SESSION["allElements"],$newMaterial);
         array_push($_SESSION["allMateriaux"],$newMaterial);
