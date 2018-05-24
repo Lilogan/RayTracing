@@ -114,7 +114,7 @@ cartesianPlan polygonPlan(polygon inputPolygon); //done
 
 float distancePoints(point a, point b);
 
-bool isInPolygon(point inputPoint, polygon inputPolygon);
+bool isInPolygon(point inputPoint, cartesianPlan inputPlan);
 
 point* intersectPolygon(polygon inputPolygon, halfLine ray);//done
 
@@ -134,6 +134,6 @@ double cosVector(vector first, vector second);
 
 point translate(point pt, vector vec);
 
-polygon whichPolygonIsPoint(solid inputSolid, point inputPoint);
+cartesianPlan whichfaceIsPoint(solid inputSolid, point inputPoint);
 
 vector normalSolid(solid inputSolid, halfLine incident, point intersect);

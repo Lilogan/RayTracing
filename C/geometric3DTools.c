@@ -226,37 +226,20 @@ cartesianPlan polygonPlan(polygon inputPolygon){
   return polygonPlan;
 }
 
-bool isInPolygon(point inputPoint, polygon inputPolygon){
-  cartesianPlan planPolygon = polygonPlan(inputPolygon);
+bool isInPlan(point inputPoint, cartesianPlan inputPlan){
   float pointX = inputPoint.x;
   float pointY = inputPoint.y;
   float pointZ = inputPoint.z;
-  float paramA = planPolygon.a;
-  float paramB = planPolygon.b;
-  float paramC = planPolygon.c;
-  float paramD = planPolygon.d;
+  float paramA = inputPlan.a;
+  float paramB = inputPlan.b;
+  float paramC = inputPlan.c;
+  float paramD = inputPlan.d;
   vector one;
   vector two;
   double angle;
 
   if(trunc(paramA*pointX+paramB*pointY+paramC*pointZ+paramD) == 0){
-    int nbrVertex = inputPolygon.pointNbr;
-
-    for (int i = 0; i < nbrVertex; i++) {
-      one = setVector(inputPoint, inputPolygon.vertex[i]);
-
-      if(i == nbrVertex-1){
-        two = setVector(inputPoint, inputPolygon.vertex[0]);
-      }
-      else{
-        two =  setVector(inputPoint, inputPolygon.vertex[i+1]);
-      }
-      angle += acos(cosVector(one,two))*180/pi;
-    }
-
-    if((angle-5) <= 360 && (angle+5)>=360){
       return true;
-    }
   }
   return false;
 }
@@ -441,18 +424,20 @@ polygon closestPolygon(solid sol, halfLine ray){
   return closest;
 }
 
-polygon whichPolygonIsPoint(solid inputSolid, point inputPoint){
+cartesianPlan whichFaceIsPoint(solid inputSolid, point inputPoint){
   int nbrPoly = inputSolid.nbPolygon;
   polygon *tabPoly = inputSolid.tabPolygon;
-  int rank = -1;
+  cartesianPlan currentPlan;
+  cartesianPlan returned;
 
   for (int i = 0; i < nbrPoly; i++) {
-    if(isInPolygon(inputPoint,tabPoly[i]) && rank == -1){
-      rank = i;
+    currentPlan = polygonPlan(tabPoly[i]);
+    if(isInPlan(inputPoint,currentPlan)){
+      returned = currentPlan;
     }
   }
 
-  return tabPoly[rank];
+  return currentPlan;
 }
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
@@ -491,8 +476,7 @@ point translate(point pt, vector vec){
 }
  vector normalSolid(solid inputSolid, halfLine incident, point intersect){
    vector normal;
-   polygon poly = whichPolygonIsPoint(inputSolid,intersect);
-   cartesianPlan plan = polygonPlan(poly);
+   cartesianPlan plan  = whichFaceIsPoint(inputSolid,intersect);
    normal = normalPlan(plan,incident.dir);
    return normal;
  }
