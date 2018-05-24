@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "geometric3DTools.h"
-
 
 #define pi 3.1415923565
 
@@ -196,19 +197,27 @@ cartesianPlan definePlan(vector dir1, vector dir2, point insidePoint){
 }
 
 cartesianPlan polygonPlan(polygon inputPolygon){
+  //printf("     StartPlan\n");
   int vertexNbr;
   vector vectorDir1;
   vector vectorDir2;
+  point* vertex = inputPolygon.vertex;
+  //printf("     vertex\n");
   cartesianPlan polygonPlan;
-
   vertexNbr = inputPolygon.pointNbr;
+  // printf("     nbrVertex : %d\n", vertexNbr);
   if(vertexNbr > 2){
-    vectorDir1 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+1));
-    vectorDir2 = setVector(*inputPolygon.vertex, *(inputPolygon.vertex+2));
-    polygonPlan = definePlan(vectorDir1, vectorDir2, *inputPolygon.vertex);
-
+  //printf(" %f-%f-%f  | %f-%f-%f\n", vertex[0].x,vertex[0].y,vertex[0].z,vertex[1].x,vertex[1].y,vertex[1].z);
+    vectorDir1 = setVector(vertex[0], vertex[1]);
+  //  printf("       Dir1\n");
+    vectorDir2 = setVector(vertex[0], vertex[2]);
+  //  printf("       Dir2\n");
+    polygonPlan = definePlan(vectorDir1, vectorDir2, vertex[0]);
+    printf("\n");
+  //printf("%d\n",err);
   }
   else{
+  //  printf("     < 2\n");
     polygonPlan.a = 0;
     polygonPlan.b = 0;
     polygonPlan.c = 0;
@@ -243,7 +252,7 @@ point* intersectPolygon(polygon inputPolygon, halfLine ray){
   }
   //printf("%lf\n",angle);
   if((angle-5) <= 360 && (angle+5)>=360){
-    // printf("touché polygon\n");
+    //printf("touché polygon\n");
     return intersect;
   }
   //printf("raté polygon\n");
@@ -346,14 +355,16 @@ bool comparePoints(point a, point b){
 
 point* intersectSolidHalfLine(solid sol, halfLine ray, point distancePoint){
   int nbPoly = sol.nbPolygon;
-  point* intersect = malloc(sizeof(point));
-  point* pointV = malloc(sizeof(point));
+//  printf("nb poly :%d\n",nbPoly);
+  point* intersect = NULL;
+  point* pointV = NULL;
   float distV = -1;
   float distPt = -1;
-
   for(int i = 0; i<nbPoly; i++){
     distPt = -1;
+    //printf("  01\n");
     intersect = intersectPolygon(sol.tabPolygon[i], ray);
+  //  printf("  %p\n", intersect);
     if(intersect != NULL){
       distPt = distancePoints(*intersect, distancePoint);
     }
@@ -365,14 +376,34 @@ point* intersectSolidHalfLine(solid sol, halfLine ray, point distancePoint){
   }
 
   if(distV == -1){
-    //printf("raté solid\n");
     return NULL;
   }
-  //printf("touché solid\n");
+
   return pointV;
+}
 
+polygon closestPolygon(solid sol, halfLine ray){
+  int nbPoly = sol.nbPolygon;
+  point* intersect; //= malloc(sizeof(point));
+  point* pointV;// = malloc(sizeof(point));
+  float distV = -1;
+  float distPt = -1;
+  int rang = -1;
+  polygon closest;
+  for(int i = 0; i<nbPoly; i++){
+    distPt = -1;
+    intersect = intersectPolygon(sol.tabPolygon[i], ray);
+    if(intersect != NULL){
+      distPt = distancePoints(*intersect, ray.randPoint);
+    }
 
-
+    if(intersect != NULL && distPt > distV){
+      distV = distPt;
+      pointV = intersect;
+      closest = sol.tabPolygon[i];
+    }
+  }
+  return closest;
 }
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint){
@@ -409,3 +440,10 @@ point translate(point pt, vector vec){
   returned.z = pt.z + vec.z;
   return returned;
 }
+ vector normalSolid(solid inputSolid, halfLine incident){
+   vector normal;
+   polygon closest = closestPolygon(inputSolid,incident);
+   cartesianPlan plan = polygonPlan(closest);
+   normal = normalPlan(plan,incident.dir);
+   return normal;
+ }

@@ -102,7 +102,7 @@ point* intersectPlanHalfLine(cartesianPlan p, halfLine d); // done
 
 vector normalPlan(cartesianPlan p, vector incident);//done
 
-// vector refracte(halfLine i, cartesianPlan p);
+// vector refracte(halfLine i, cartesianPlan p);printf("interse plan\n")printf("interse plan\n");;
 
 // cartesianPlan firstPlanIntersect(line line);
 
@@ -120,6 +120,8 @@ point* intersectSpheroideHalfLine(spheroide spheroide, halfLine ray, point point
 
 point* intersectSolidHalfLine(solid so, halfLine ray, point distancePoint);
 
+polygon closestPolygon(solid sol, halfLine ray);
+
 bool comparePoints(point a, point b);
 
 vector normalSpheroide(spheroide inputSpheroide, point normalPoint);
@@ -129,3 +131,5 @@ vector normalizeVector(vector inputVector);
 double cosVector(vector first, vector second);
 
 point translate(point pt, vector vec);
+
+vector normalSolid(solid inputSolid, halfLine incident);

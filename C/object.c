@@ -62,7 +62,7 @@ object createObjectPoint(point pt, material oMaterial){
 point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
   point *intersection;
   if(!strcmp(obj.type,"SP")){
-     spheroide sp = obj.parameter.sp;
+    spheroide sp = obj.parameter.sp;
     intersection = intersectSpheroideHalfLine(sp,ray,pointDistance);
     return intersection;
   }
@@ -70,13 +70,12 @@ point *intersectHalfLine(object obj, halfLine ray, point pointDistance){
     cartesianPlan pl = obj.parameter.pl;
     intersection = intersectPlanHalfLine(pl,ray);
     return intersection;
-    printf("interse plan\n");
   }
-  /*if(!strcmp(obj.type,"SO")){
+  if(!strcmp(obj.type,"SO")){
     solid so = obj.parameter.so;
     intersection = intersectSolidHalfLine(so,ray, pointDistance);
     return intersection;
-  }*/
+  }
   return NULL;
 }
 
@@ -92,11 +91,11 @@ vector normalObject(object obj, point normalPoint, halfLine incident){
     normal = normalPlan(pl, incident.dir);
     return normal;
   }
-  /*if(!strcmp(obj.type,"SO")){
+  if(!strcmp(obj.type,"SO")){
      solid so = obj.parameter.so;
-    normal = normalSolid(so,normalPoint);
+    normal = normalSolid(so, incident);
     return normal;
-  }*/
+  }
   return setVector(setPoint(0,0,0),setPoint(0,0,0));
 }
 
