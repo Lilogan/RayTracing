@@ -93,7 +93,7 @@ vector normalObject(object obj, point normalPoint, halfLine incident){
   }
   if(!strcmp(obj.type,"SO")){
      solid so = obj.parameter.so;
-    normal = normalSolid(so, incident);
+    normal = normalSolid(so, incident, normalPoint);
     return normal;
   }
   return setVector(setPoint(0,0,0),setPoint(0,0,0));

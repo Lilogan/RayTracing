@@ -11,8 +11,8 @@
 
 
 
-color getLight(object light, object obj, halfLine intersect, point intersectPoint, point camera){
-  vector normal = normalObject(obj,intersectPoint, intersect, camera);
+color getLight(object light, object obj, halfLine intersect, point intersectPoint){
+  vector normal = normalObject(obj,intersectPoint, intersect);
   double angle = cosVector(normal,intersect.dir);
   color fColor = DEFCOLOR;
   color oColor = obj.oMaterial.oColor;
@@ -102,7 +102,7 @@ color determineColor(listObj* headListObject, listObj* headListLight, point came
         float distanceSecondIntersectLamp = -1;
 
         if(secondIntersect != NULL && closestObject->id != currentObject.id){
-          distanceSecondIntersectLamp = distancePoints(currentLightPoint, *secondIntersect);
+          distanceSecondIntersectLamp = distancePoints(currentLightPoint, *secondIntersect)+1;
         }
 
         if(distanceSecondIntersectLamp < distanceFirstIntersectLamp && distanceSecondIntersectLamp != -1){
@@ -112,7 +112,7 @@ color determineColor(listObj* headListObject, listObj* headListLight, point came
       }
 
       if(lampIsClosest){
-        color calc =  getLight(currentLight,*closestObject,hlLampFirstIntersect,*firstIntersect,camera);
+        color calc =  getLight(currentLight,*closestObject,hlLampFirstIntersect,*firstIntersect);
         detColor = addColor(detColor,calc);
       }
       currentListLight = currentListLight->next;
