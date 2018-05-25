@@ -28,6 +28,7 @@
       <form class="formHeader" method="POST" action="./php/controller.php">
         <select name="scenePicker">
           <option>Scènes faites</option>
+          <option>Scène 1</option>
           <option>Scène 2</option>
           <option>Scène 3</option>
         </select>
@@ -56,14 +57,17 @@
         </div>
         <div id="right">
             <?php
-             if(file_exists($_SESSION["shownScene"]) && $_SESSION["shownScene"] != NULL){
-                echo "<img src='".$_SESSION["shownScene"]."'/>";
+             if(file_exists($_SESSION["shownScene"]) && $_SESSION["shownScene"] != NULL && $_SESSION["isVideo"] == false){
+                  echo "<img src='".$_SESSION["shownScene"]."'/>";
              }
-             else if($_SESSION["chosenType"] != NULL){
-               include("./php/pages/showImage.php");
+            else if($_SESSION["isVideo"] == true){
+              echo "video";
+              echo "<video controls src='./php/output.mp4'/>";
              }
 
+
             ?>
+
         </div>
     </div>
 </body>

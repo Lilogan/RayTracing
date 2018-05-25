@@ -113,6 +113,9 @@ header{
 img{
   height: 75%;
 }
+video{
+  height: 75%;
+}
 #formAllElements{
   margin-top: 15px;
   margin-left: 15px;

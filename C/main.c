@@ -295,7 +295,7 @@ int main() {
       }
     }
     else if(strncmp(curInfo, "NAME",4) == 0){
-      fgets(curInfo,7,file);
+      fgets(curInfo,8,file);
       fileName = malloc(strlen(curInfo)*sizeof(char));
       memcpy(fileName,curInfo,strlen(curInfo));
     }

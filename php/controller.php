@@ -62,11 +62,17 @@ function HSV_TO_RGB ($H, $S, $V){
     return $RGB;
 }
 
+function removeImgs($nbImg){
+  for($i = 2; $i <= $nbImg; $i++){
+    unlink($i.".bmp");
 
+  }
+}
 
 
 function setValue($begin, $end, $nbFrame, $curImg){
-    return ($begin-$curImg*($begin-$end)/$nbFrame);
+    $returned = ($begin-$curImg*($begin-$end)/$nbFrame);
+    return $returned;
 }
 function colorTransition($r, $rend,$g,$gend,$b,$bend, $nbFrame, $curImg){
     $beginHSV = RGB_TO_HSV($r,$g,$b);
@@ -83,7 +89,6 @@ function redirect($lien){
 
 if(filter_input(INPUT_POST, "chooseType", FILTER_SANITIZE_SPECIAL_CHARS)){
     $_SESSION["chosenType"] = filter_input(INPUT_POST, "typePicker", FILTER_SANITIZE_SPECIAL_CHARS);
-    echo $_SESSION["chosenType"];
     redirect("../index.php");
 }
 
@@ -93,7 +98,8 @@ if(!isset($_SESSION["chosenType"]) || !isset($_SESSION["allElements"]) || !isset
     $_SESSION["polyName"] = array();
     $_SESSION["allMateriaux"] = array();
     $_SESSION["materiauxName"] = array();
-    $_SESSION["shownScene"] = "test.jpg";
+    $_SESSION["shownScene"] = "./php/images/Scène 2.jpg";
+    $_SESSION["isVideo"] = false;
 }
 
 if(filter_input(INPUT_POST, "addSpheroide", FILTER_SANITIZE_SPECIAL_CHARS)){
@@ -229,7 +235,7 @@ if(filter_input(INPUT_POST, "addLampe", FILTER_SANITIZE_SPECIAL_CHARS)){
         $rend = $r;
     }
     if($gend == NULL){
-        $zgend = $g;
+        $gend = $g;
     }
     if($bend == NULL){
         $bend = $b;
@@ -275,7 +281,7 @@ if(filter_input(INPUT_POST, "addPlan",FILTER_SANITIZE_SPECIAL_CHARS)){
         $cend = $c;
     }
     if($dend == NULL){
-        $dend = $z;
+        $dend = $d;
     }
 
     if($a!= NULL && $b!= NULL && $c!= NULL && $d!= NULL && $materialName != NULL){
@@ -339,9 +345,11 @@ if(filter_input(INPUT_POST, "setSolide", FILTER_SANITIZE_SPECIAL_CHARS)){
 if(filter_input(INPUT_POST, "execute", FILTER_SANITIZE_SPECIAL_CHARS)){
     $frameRate = filter_input(INPUT_POST, "frameRate", FILTER_SANITIZE_SPECIAL_CHARS);
     $nbImg = filter_input(INPUT_POST, "nbSecondes", FILTER_SANITIZE_SPECIAL_CHARS) * $frameRate;
-    $_SESSION["shownScene"] = "output.mp4";
-    unlink("./php/output.mp4");
+    unlink("1.bmp");
+    $_SESSION["shownScene"] = "./php/1.bmp";
+    unlink("output.mp4");
     for($curImg = 1; $curImg <= $nbImg; $curImg++){
+      $test = 1;
         $j = 0;
         $string = NULL;
         $fichier = fopen("../allInfos","w");
@@ -416,8 +424,15 @@ if(filter_input(INPUT_POST, "execute", FILTER_SANITIZE_SPECIAL_CHARS)){
 
 
     }
-    $_SESSION["shownScene"] = "./php/1.bmp";
-    exec("ffmpeg -y -framerate ".$frameRate." -i %d.bmp output.mp4");
+
+    if($nbImg > 1){
+      exec("ffmpeg -r 1/5 -i %d.bmp -c:v libx264 -frames:v ".$frameRate." -pix_fmt output.mp4");
+      $_SESSION["isVideo"] = true;
+    }
+    else{
+      $_SESSION["isVideo"] = false;
+    }
+    removeImgs($nbImg);
     redirect("../index.php");
 }
 
@@ -460,6 +475,7 @@ if(filter_input(INPUT_POST, "addMateriaux", FILTER_SANITIZE_SPECIAL_CHARS)){
         array_push($newMaterial, $transparance);
         array_push($newMaterial, $refraction);
         array_push($_SESSION["allElements"],$newMaterial);
+        array_push($_SESSION["materiauxName"], $nom);
         array_push($_SESSION["allMateriaux"],$newMaterial);
     }
     redirect("../index.php");
@@ -468,10 +484,8 @@ if(filter_input(INPUT_POST, "addMateriaux", FILTER_SANITIZE_SPECIAL_CHARS)){
 if(filter_input(INPUT_POST, "showScene", FILTER_SANITIZE_SPECIAL_CHARS)){
     $shownScene = filter_input(INPUT_POST, "scenePicker", FILTER_SANITIZE_SPECIAL_CHARS);
     if($shownScene != "Scènes faites"){
-        $_SESSION["shownScene"] = "./php/images/".$shownScene.".jpg";
-    }
-    else{
-        $_SESSION["shownScene"] = "test.jpg";
+        $_SESSION["shownScene"] = "./php/images/".$shownScene.".bmp";
+        $_SESSION["isVideo"] = false;
     }
     redirect("../index.php");
 }
