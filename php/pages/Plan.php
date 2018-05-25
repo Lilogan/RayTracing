@@ -28,7 +28,24 @@
             ?>
         </select>
     </div>
-
+    
+    
+    <div class="inputParameter">
+        <label for="Aend">A:</label>   
+        <input type="number" id="Aend" name='Aend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Bend">B:</label>   
+        <input type="number" id="Bend" name='Bend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Cend">C:</label>   
+        <input type="number" id="Cend" name='Cend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Dend">D:</label>   
+        <input type="number" id="Dend" name='Dend' step="0.1"/>
+    </div>
     <div class="inputParameter">
         <input type="submit"  name="addPlan" value="Ajouter"/>
     </div>

@@ -56,11 +56,8 @@
         </div>
         <div id="right">
             <?php
-            if(isset($_SESSION["chosenType"]) && $_SESSION["chosenType"] != "Creer Scène"){
+             if($_SESSION["chosenType"] != NULL){
                 include("./php/pages/showImage.php");
-             }
-             else{
-                 echo "cacahuete";
              }
 
             ?>

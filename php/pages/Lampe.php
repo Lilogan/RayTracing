@@ -1,8 +1,9 @@
 <p id="elementTitle">Ajouter une lampe</p>
 
 <p class="elementDesc">position (X,Y,Z)<br/>couleur entre 0 et 255</p>
-
 <form id="formParameters" method="POST" action="./php/controller.php">
+    <p class="elementDesc"><br/><br/>Début de l'animation</p>
+
     <div class="inputParameter">
         <label for="X">X:</label>   
         <input type="number" id="X" name='X' step="0.1"/>
@@ -26,6 +27,35 @@
     <div class="inputParameter">
         <label for="B">Bleu:</label>
         <input type="number" id="B" name='B' step="1" min="0" max="255"/>
+    </div>
+
+
+    <p class="elementDesc"><br/><br/>Fin de l'animation</p>
+
+<form id="formParameters" method="POST" action="./php/controller.php">
+    <div class="inputParameter">
+        <label for="Xend">X:</label>   
+        <input type="number" id="Xend" name='Xend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Y">Y:</label>
+        <input type="number" id="Yend" name='Yend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Z">Z:</label>
+        <input type="number" id="Zend" name='Zend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Rend">Rouge:</label>
+        <input type="number" id="Rend" name='Rend' step="1" min="0" max="255"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Gend">Vert:</label>
+        <input type="number" id="Gend" name='Gend' step="1" min="0" max="255"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Bend">Bleu:</label>
+        <input type="number" id="Bend" name='Bend' step="1" min="0" max="255"/>
     </div>
     
     <div class="inputParameter">

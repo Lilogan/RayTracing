@@ -43,7 +43,7 @@ header{
 }
 #right{
     height: auto;
-    widows: 100%;
+    width: 100%;
     overflow: auto;
     display: flex;
     flex-direction: row;
@@ -112,4 +112,17 @@ header{
 }
 img{
   height: 75%;
+}
+#formAllElements{
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-bottom: 30px;
+}
+#formAllElements .inputParameter{
+  justify-content: space-around;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
 }

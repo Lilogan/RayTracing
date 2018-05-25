@@ -3,6 +3,8 @@
 <p class="elementDesc">Equation de la forme: <br/> Ax² + By² + Cz²  - 1 = 0:</p>
 
 <form id="formParameters" method="POST" action="./php/controller.php">
+    <p class="elementDesc">Début de l'animation</p>
+
     <div class="inputParameter">
         <label for="A">A:</label>   
         <input type="number" id="A" name='A' step="0.1"/>
@@ -37,6 +39,33 @@
         </select>
     </div>
 
+        <p class="elementDesc">Fin de l'animation</p>
+
+    
+    <div class="inputParameter">
+        <label for="Aend">A:</label>   
+        <input type="number" id="Aend" name='Aend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="B">B:</label>   
+        <input type="number" id="Bend" name='Bend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Cend">C:</label>   
+        <input type="number" id="Cend" name='Cend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Cxend">Centre x:</label>   
+        <input type="number" id="Cxend" name='Cxend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Cyend">Centre y:</label>   
+        <input type="number" id="Cyend" name='Cyend' step="0.1"/>
+    </div>
+    <div class="inputParameter">
+        <label for="Czend">Centre z:</label>   
+        <input type="number" id="Czend" name='Czend' step="0.1"/>
+    </div>
     <div class="inputParameter">
         <input type="submit"  name="addSpheroide" value="Ajouter"/>
     </div>

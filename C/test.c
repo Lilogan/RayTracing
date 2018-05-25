@@ -134,6 +134,7 @@ int main() {
   image* I = newImage(width, height);
   point camera = setPoint(width/2, distanceCameraEcran, height/2);
 
+  char* fileName;
   listObj *listLamp = NULL;
   listObj *objects = NULL;
   FILE* file = fopen("../allInfos","r");
@@ -293,6 +294,11 @@ int main() {
         addObjToList(objects, newSp);
       }
     }
+    else if(strncmp(curInfo, "NAME",4) == 0){
+      fgets(curInfo,7,file);
+      fileName = malloc(strlen(curInfo)*sizeof(char));
+      memcpy(fileName,curInfo,strlen(curInfo));
+    }
     else if(strncmp(curInfo, "SO", 2) == 0){
     //  printf("add Solid\n");
       fgets(curInfo,7,file);
@@ -373,7 +379,7 @@ int main() {
     }
   }
   printf("\n");
-  save(I,"test2.bmp");
+  save(I,fileName);
 
   return 0;
 }
