@@ -185,8 +185,8 @@ function ImageCreateFromBmp($filename)
 /*** example usage ***/
 
 /*** read in the BMP image ***/
-$img = ImageCreateFromBmp("./php/test2.bmp");
+$img = ImageCreateFromBmp($_SESSION["shownScene"]);
 /*** write the new jpeg image ***/
-imagejpeg($img, "test.jpg");
+imagejpeg($img, "image.jpg");
 
 echo "<img src='".$_SESSION["shownScene"]."' alt='Impossible d\'afficher l\'image'/>";

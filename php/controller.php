@@ -417,7 +417,7 @@ if(filter_input(INPUT_POST, "execute", FILTER_SANITIZE_SPECIAL_CHARS)){
 
     }
     $_SESSION["shownScene"] = "./php/1.bmp";
-    exec("ffmpeg -framerate ".$frameRate." -i %d.bmp output.mp4");
+    exec("ffmpeg -y -framerate ".$frameRate." -i %d.bmp output.mp4");
     redirect("../index.php");
 }
 
@@ -468,10 +468,9 @@ if(filter_input(INPUT_POST, "addMateriaux", FILTER_SANITIZE_SPECIAL_CHARS)){
 if(filter_input(INPUT_POST, "showScene", FILTER_SANITIZE_SPECIAL_CHARS)){
     $shownScene = filter_input(INPUT_POST, "scenePicker", FILTER_SANITIZE_SPECIAL_CHARS);
     if($shownScene != "Scènes faites"){
-        $_SESSION["shownScene"] = "php/images/".$shownScene.".jpg";
+        $_SESSION["shownScene"] = "./php/images/".$shownScene.".jpg";
     }
     else{
-        echo "dacc";
         $_SESSION["shownScene"] = "test.jpg";
     }
     redirect("../index.php");

@@ -28,8 +28,8 @@
       <form class="formHeader" method="POST" action="./php/controller.php">
         <select name="scenePicker">
           <option>Scènes faites</option>
-          <option>Scène 1</option>
           <option>Scène 2</option>
+          <option>Scène 3</option>
         </select>
         <input type="submit" name="showScene" value="Voir"/>
       </form>
@@ -56,8 +56,11 @@
         </div>
         <div id="right">
             <?php
-             if($_SESSION["chosenType"] != NULL){
-                include("./php/pages/showImage.php");
+             if(file_exists($_SESSION["shownScene"]) && $_SESSION["shownScene"] != NULL){
+                echo "<img src='".$_SESSION["shownScene"]."'/>";
+             }
+             else if($_SESSION["chosenType"] != NULL){
+               include("./php/pages/showImage.php");
              }
 
             ?>
